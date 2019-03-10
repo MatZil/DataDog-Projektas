@@ -1,5 +1,4 @@
 <?php
-require_once("index.php");
 require_once("User.php");
 $u1 = new User("name1", password_hash("saugu", PASSWORD_DEFAULT));
 $u2 = new User("name2", password_hash("saugu1", PASSWORD_DEFAULT));
@@ -30,11 +29,13 @@ if(isset($_POST['loginButton']))
         }
     }
     if($correctPw)
-        echo "Welcome, " . $_SESSION['username'] . "<br>";
+        $message = "Welcome, " . $_SESSION['username'] . "<br>";
     elseif($correctName) {
-        $_SESSION['unverified'] = $name;
-        echo "Incorrect Password!";
+        $message = "Incorrect Password!";
+        $_SESSION['username'] = $name;
     }
     else
-        echo "You are not a registered user!";
+        $message = "You are not a registered user!";
 }
+require_once("index.php");
+echo $message;
