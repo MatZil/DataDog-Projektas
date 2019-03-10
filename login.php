@@ -12,12 +12,12 @@ $user1 = new User('oof@ktu.lt', password_hash('pass', PASSWORD_DEFAULT));
 $user2 = new User('biggeroof@ktu.lt', password_hash('pass2', PASSWORD_DEFAULT));
 $user3 = new User('whatisthis@yikes.lt', password_hash('pass3', PASSWORD_DEFAULT));
 $users = array($user1, $user2, $user3);
+session_start();
 
 if (isset($_POST['login-submit'])){
 
     $login = $_POST['email'];
     $pass = $_POST['pwd'];
-
     $status = false;
 
     if (empty($login) || empty($pass)){
@@ -35,9 +35,11 @@ if (isset($_POST['login-submit'])){
             }
         }
     }
-
     if ($status === false){
         header('Location: index.php?error=LoginFailed');
+    }
+    else {
+        $_SESSION['isLoggedIn'] = true;
     }
 }
 else {
@@ -48,8 +50,16 @@ else {
 
 <html>
 <body>
-<h1>
-    You have logged in!
-</h1>
+<h1>You have logged in!</h1>
+<form action="index.php" method="post">
+    <button type="submit" name="logout-submit">Logout</button>
+</form>
 </body>
 </html>
+
+<?php
+if (isset($_POST['logout-submit'])) {
+    session_destroy();
+    header("Location: index.php");
+    exit();
+}
