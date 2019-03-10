@@ -8,15 +8,16 @@
 
 include "User.php";
 
-$user1 = new User('oof@ktu.lt', 'pass');
-$user2 = new User('biggeroof@ktu.lt', 'pass2');
-$user3 = new User('whatisthis@yikes.lt', 'pass3');
+$user1 = new User('oof@ktu.lt', password_hash('pass', PASSWORD_DEFAULT));
+$user2 = new User('biggeroof@ktu.lt', password_hash('pass2', PASSWORD_DEFAULT));
+$user3 = new User('whatisthis@yikes.lt', password_hash('pass3', PASSWORD_DEFAULT));
 $users = array($user1, $user2, $user3);
 
 if (isset($_POST['login-submit'])){
 
     $login = $_POST['email'];
     $pass = $_POST['pwd'];
+
     $status = false;
 
     if (empty($login) || empty($pass)){
@@ -25,7 +26,7 @@ if (isset($_POST['login-submit'])){
     }
     else {
         foreach ($users as $user){
-            if ($login === $user->email and $pass === $user->password){
+            if ($login === $user->email and password_verify($pass, $user->password)){
                 $status = true;
                 break;
             }
