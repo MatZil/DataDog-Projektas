@@ -16,6 +16,8 @@
     <input name="usernameBox" size="15"  style="height: 19px;" type="text" required value="<?php if(isset($_SESSION["username"])) echo $_SESSION["username"]; ?>">
     &nbsp; &nbsp; &nbsp;
     <input name="passwordBox" size="15" style="height: 19px;"  type="password" required>
+    &nbsp; &nbsp; &nbsp;
+    <input type="submit" name="registerButton" value="Register">
 
     <br>
     <br>
