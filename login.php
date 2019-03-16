@@ -40,11 +40,11 @@
             break;
         }
     }
-    
+
     if ($_SESSION["LoggedIn"]) {
         echo "<h1>login succeed</h1>";
     } else {
-        echo "<h1>login information was incorrect</h1>";        
+        echo "<h1>login information was incorrect</h1>";
     }
 
     //////////////////////////////////////////////////////////////////////
@@ -73,4 +73,4 @@
 
 </body>
 
-</html> 
+</html>
