@@ -5,7 +5,7 @@
  * Date: 2019-03-16
  * Time: 17:39
  */
-
+include_once "User.php";
 class dbconnect
 {
     private $server;
@@ -14,15 +14,13 @@ class dbconnect
     private $dbname;
     private $charset;
 
-    function __construct($host, $name, $pw, $db, $charset)
-    {
-        $this->server = $host;
-        $this->username = $name;
-        $this->password = $pw;
-        $this->dbname = $db;
-        $this->charset = $charset;
+    function __construct(){
+        $this->server = "localhost";
+        $this->username = "root";
+        $this->password = "";
+        $this->dbname = "myusers";
+        $this->charset = "utf8mb4";
     }
-
     function connect()
     {
         try
@@ -36,5 +34,28 @@ class dbconnect
         {
             echo "Connection failed: " . $e->getMessage();
         }
+    }
+
+    function getUser($username){
+        $stmt =  $this->connect()->query("SELECT * FROM users WHERE username = '$username'");
+            foreach ($stmt as $row) {
+                return new User($row['username'], $row['hash'], $row['real_name'], $row['surname'], $row['email']);
+            }
+    }
+
+    function duplicateUsername($username){
+        $stmt = $this->connect()->query("SELECT username FROM users WHERE username = '$username'");
+        if($stmt->rowCount() > 0)
+            return true;
+        else
+            return false;
+    }
+
+    function duplicateEmail($email){
+        $stmt = $this->connect()->query("SELECT username FROM users WHERE email = '$email'");
+        if($stmt->rowCount() > 0)
+            return true;
+        else
+            return false;
     }
 }

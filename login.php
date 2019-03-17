@@ -1,12 +1,8 @@
 <?php
-require_once("User.php");
-$u1 = new User("name1", password_hash("saugu", PASSWORD_DEFAULT));
-$u2 = new User("name2", password_hash("saugu1", PASSWORD_DEFAULT));
-$u3 = new User("name3", password_hash("saugu22", PASSWORD_DEFAULT));
-$u4 = new User("name4", password_hash("sauguty1", PASSWORD_DEFAULT));
-$u5 = new User("name5", password_hash("saugu", PASSWORD_DEFAULT));
-$users = array($u1, $u2, $u3, $u4, $u5);
 
+include_once "User.php";
+include_once "dbconnect.php";
+$db = new dbconnect();
 if(!isset($_SESSION))
     session_start();
 if(isset($_POST['loginButton']))
@@ -15,27 +11,28 @@ if(isset($_POST['loginButton']))
     $correctPw = false;
     $name = $_POST['usernameBox'];
     $pw = $_POST['passwordBox'];
-    foreach($users as $user)
+
+    $user = $db->getUser($name);
+    if(!is_null($user))
     {
-        if($name === $user->username)
-        {
-            $correctName = true;
-            if(password_verify($pw, $user->hashedPw))
-            {
-                $_SESSION['username'] = $name;
-                $correctPw = true;
-                break;
-            }
+        $correctName = true;
+        if (password_verify($pw, $user->hashedPw)) {
+            $correctPw = true;
         }
     }
-    if($correctPw)
-        $message = "Welcome, " . $_SESSION['username'] . "<br>";
-    elseif($correctName) {
-        $message = "Incorrect Password!";
+    if($correctPw) {
+        $_SESSION['loggedin'] = true;
+        $_SESSION['username'] = $name;
+        header("Location:main.php");
+        exit;
+    }
+    else if($correctName) {
+        $message = "Incorrect Password! <br>";
         $_SESSION['username'] = $name;
     }
     else
-        $message = "You are not a registered user!";
+        $message = "You are not a registered user!<br>";
+    require_once("index.php");
+    echo $message;
 }
-require_once("index.php");
-echo $message;
+

@@ -5,8 +5,8 @@
  * Date: 2019-03-10
  * Time: 14:06
  */
-include "dbconnect.php";
-class User extends dbconnect
+
+class User
 {
     public $username;
     public $hashedPw;
@@ -25,9 +25,13 @@ class User extends dbconnect
 
     function pushToDb($currentDate)
     {
-        $db = new dbconnect("localhost", "root", "", "myusers", "utf8mb4");
+        $db = new dbconnect();
+        $db->connect()->query("INSERT INTO users 
+                                         VALUES('$this->name', '$this->surname', '$this->username', '$this->email', '$currentDate', '$this->hashedPw')");
+    }
 
-        $db->connect()->query("INSERT INTO users
-                                         VALUES('$this->name', '$this->surname', '$this->username', '$this->email', DEFAULT, NULL, '$currentDate', '$this->hashedPw')");
+    function getEvents(){
+        $db = new dbconnect();
+        return $db->connect()->query("SELECT * FROM events WHERE fk_users_username = '$this->username'");
     }
 }
