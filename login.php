@@ -26,6 +26,7 @@ if (isset($_POST['login-submit'])){
         exit();
     }
     else {
+        //use prepared statements to protect from sql injections
         $qry = mysqli_query($conn, "SELECT * FROM users WHERE email='$login'");
         $row = mysqli_fetch_array($qry);
 
