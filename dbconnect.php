@@ -58,4 +58,8 @@ class dbconnect
         else
             return false;
     }
+
+    function addEvent($event){
+
+    }
 }

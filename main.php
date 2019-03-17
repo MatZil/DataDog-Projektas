@@ -9,6 +9,7 @@
 
 <body>
 <form>
+    <a href="newEventForm.php">Create New Event <br><br></a>
     <?php
     include_once "dbconnect.php";
     session_start();
@@ -25,7 +26,8 @@
                 echo "Description: " . $event['description'] . "<br>";
                 echo "Created: " . $event['created'] . "<br>";
                 echo "Price: " . $event['price'] . " eur<br>";
-                echo "Address: " . $event['address'] . "<br><br><br>";
+                echo "Address: " . $event['address'] . "<br>";
+                echo "Event's date: " . $event['event_date'] . "<br><br><br>";
             }
         }
         else{
