@@ -5,7 +5,7 @@
  * Date: 3/9/2019
  * Time: 6:47 PM
  */
-
+session_start();
 ?>
 
 <html>
@@ -16,9 +16,6 @@
             <button type="submit" name="login-submit">Login</button>
         </form>
         <?php
-        if (isset($_SESSION['isLoggedIn'])){
-            echo '<h1>You are already logged in!</h1>';
-        }
 
         if (isset($_GET['error'])){
             if ($_GET['error'] === 'LoginFailed')

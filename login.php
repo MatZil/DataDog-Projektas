@@ -7,11 +7,12 @@
  */
 
 include "User.php";
+include_once "includes/dbh.inc.php";
 
-$user1 = new User('oof@ktu.lt', password_hash('pass', PASSWORD_DEFAULT));
-$user2 = new User('biggeroof@ktu.lt', password_hash('pass2', PASSWORD_DEFAULT));
-$user3 = new User('whatisthis@yikes.lt', password_hash('pass3', PASSWORD_DEFAULT));
-$users = array($user1, $user2, $user3);
+//$user1 = new User('oof@ktu.lt', password_hash('pass', PASSWORD_DEFAULT));
+//$user2 = new User('biggeroof@ktu.lt', password_hash('pass2', PASSWORD_DEFAULT));
+//$user3 = new User('whatisthis@yikes.lt', password_hash('pass3', PASSWORD_DEFAULT));
+//$users = array($user1, $user2, $user3);
 session_start();
 
 if (isset($_POST['login-submit'])){
@@ -25,21 +26,29 @@ if (isset($_POST['login-submit'])){
         exit();
     }
     else {
-        foreach ($users as $user){
-            if ($login === $user->email and password_verify($pass, $user->password)){
-                $status = true;
-                break;
-            }
-            else {
-                $status = false;
-            }
+        $qry = mysqli_query($conn, "SELECT * FROM users WHERE email='$login'");
+        $row = mysqli_fetch_array($qry);
+
+        if ($login === $row['email'] and password_verify($pass, $row['password_hash'])){
+            $status = true;
+            $uid=$row['id'];
         }
     }
     if ($status === false){
         header('Location: index.php?error=LoginFailed');
     }
-    else {
+    elseif ($status === true) {
         $_SESSION['isLoggedIn'] = true;
+        $qry = mysqli_query($conn, "SELECT * FROM events WHERE users_id='$uid'");
+        //Imagine a proper table here:
+        echo '<font size = "5">Your events: </font><br>';
+        echo '<strong>'.'Event name' .'</strong>'. str_repeat('&nbsp;', 10) .'<strong>'.'Date' .'</strong>'. '<br>';
+        while($row = mysqli_fetch_array($qry)) {
+            echo $row['name'] . str_repeat('&nbsp;', 2);
+            echo $row['date'];
+            echo '<br>';
+        }
+        echo '<br>';
     }
 }
 else {
@@ -50,16 +59,18 @@ else {
 
 <html>
 <body>
-<h1>You have logged in!</h1>
 <form action="index.php" method="post">
     <button type="submit" name="logout-submit">Logout</button>
 </form>
+<footer style="color:green"><font size="2">You have logged in!</font></footer>
+<!--<a href="index.php">Main menu</a>-->
 </body>
 </html>
 
 <?php
 if (isset($_POST['logout-submit'])) {
     session_destroy();
+    $conn->close();
     header("Location: index.php");
     exit();
 }
