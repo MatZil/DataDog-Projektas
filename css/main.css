@@ -1,0 +1,22 @@
+form {
+    display: inline-block;
+    width: 200px;
+    margin-left: 50px
+}
+
+form>input:not([type="submit"]) {
+    width: inherit;
+    margin-top: 4px;
+}
+
+form>div>input[type="submit"] {
+    float: right;
+}
+
+form>div {
+    margin-top: 10px
+}
+
+.err {
+    color: red;
+}
