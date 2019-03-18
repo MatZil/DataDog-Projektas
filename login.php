@@ -64,11 +64,20 @@
     SCRIPT_END:
     ?>
 
-    <h4>Redirecting to main page...</h4>
+    <h4>Redirecting to main page in <span id="secCount"></span> Seconds...</h4>
+
     <script>
-        setTimeout(function() {
+        var secs = 5;
+        var secCount = document.getElementById("secCount");
+        secCount.innerHTML = secs;
+
+        setInterval(() => {
+            secCount.innerHTML = --secs;
+        }, 1000);
+
+        setTimeout(() => {
             window.location.href = "/";
-        }, 3000);
+        }, secs * 1000);
     </script>
 
 </body>
