@@ -85,9 +85,9 @@ class User implements UserInterface
      *
      * @see UserInterface
      */
-    public function getUsername(): string
+    public function getUsername(): ?string
     {
-        return (string) $this->userName;
+        return $this->userName;
     }
 
     /**
