@@ -1,7 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}hello{% endblock %}
+{% block title %}Amazing Homepage{% endblock %}
 
 {% block body %}
     <h1>Hello world</h1>
+    <div>
+        <p>
+            Not a user yet!? Go ahead and <a href="{{ path('app_register') }}">register</a>!
+        </p>
+    </div>
 {% endblock %}
