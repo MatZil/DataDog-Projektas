@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -12,6 +13,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements UserInterface
 {
+    public function __construct()
+    {
+        $this->roles = [
+          '{role: ROLE_USER}'
+        ];
+    }
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -21,6 +29,9 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\NotNull()
+     * @Assert\NotBlank()
+     * @Assert\Email()
      */
     private $email;
 
@@ -34,6 +45,26 @@ class User implements UserInterface
      * @ORM\Column(type="string")
      */
     private $password;
+
+    /**
+     * @ORM\Column(type="string", length=15)
+     * @Assert\NotNull()
+     * @Assert\NotBlank()
+     */
+    private $userName;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    private $surname;
+
+    /**
+     * @ORM\Column(type="string", length=15)
+     * @Assert\NotNull()
+     * @Assert\NotBlank()
+     */
+    private $firstName;
+
 
     public function getId(): ?int
     {
@@ -57,9 +88,9 @@ class User implements UserInterface
      *
      * @see UserInterface
      */
-    public function getUsername(): string
+    public function getUsername()
     {
-        return (string) $this->email;
+        return (string) $this->userName;
     }
 
     /**
@@ -111,5 +142,36 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function setUserName(string $userName): self
+    {
+        $this->userName = $userName;
+
+        return $this;
+    }
+
+    public function getSurname(): ?string
+    {
+        return $this->surname;
+    }
+
+    public function setSurname(?string $surname): self
+    {
+        $this->surname = $surname;
+
+        return $this;
+    }
+
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(string $firstName): self
+    {
+        $this->firstName = $firstName;
+
+        return $this;
     }
 }
