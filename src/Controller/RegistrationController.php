@@ -1,0 +1,57 @@
+<?php
+
+namespace App\Controller;
+
+use App\Entity\User;
+use App\Form\RegistrationFormType;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Validator\Constraints\Email as EmailConstraint;
+
+class RegistrationController extends Controller
+{
+
+    /**
+     * @Route("/register", name="app_register")
+     */
+    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
+    {
+
+        $user = new User();
+        $form = $this->createForm(RegistrationFormType::class, $user);
+        $form->handleRequest($request);
+        $errMessage = "";
+        if ($form->isSubmitted() && $form->isValid()) {
+            // encode the plain password
+            $user->setPassword(
+                $passwordEncoder->encodePassword(
+                    $user,
+                    $form->get('plainPassword')->getData()
+                )
+            );
+            $email = $user->getEmail();
+            $emailConstraint = new EmailConstraint();
+            $errMessage = 'Your email is not valid!';
+            $errors = $this->get('validator')->validate(
+                $email,
+                $emailConstraint
+            );
+            if($errors == "") {
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($user);
+                $entityManager->flush();
+                // do anything else you need here, like send an email
+
+                return $this->redirectToRoute('index');
+            }
+        }
+        return $this->render('registration/register.html.twig', [
+            'registrationForm' => $form->createView(),
+            'errorMessage' => $errMessage
+        ]);
+
+    }
+}
