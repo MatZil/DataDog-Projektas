@@ -4,6 +4,7 @@
 
 {% block body %}
     {{ form_start(registrationForm) }}
+<<<<<<< HEAD
     {{ form_label(registrationForm.email) }}
     <br>
     {{ form_widget(registrationForm.email) }}
@@ -31,5 +32,9 @@
     {{ form_errors(registrationForm.username) }}
     {{ form_errors(registrationForm.firstname) }}
     {{ form_errors(registrationForm.surname) }}
+
+        {{ form_row(registrationForm.email) }}
+        {{ form_row(registrationForm.plainPassword) }}
+        <button class="btn btn-primary">Register</button>
     {{ form_end(registrationForm) }}
 {% endblock %}
