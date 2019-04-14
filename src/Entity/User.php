@@ -29,7 +29,6 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Assert\NotNull()
      * @Assert\NotBlank()
      * @Assert\Email()
      */
@@ -48,7 +47,6 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=15)
-     * @Assert\NotNull()
      * @Assert\NotBlank()
      */
     private $userName;
@@ -60,7 +58,6 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=15)
-     * @Assert\NotNull()
      * @Assert\NotBlank()
      */
     private $firstName;
@@ -88,7 +85,7 @@ class User implements UserInterface
      *
      * @see UserInterface
      */
-    public function getUsername()
+    public function getUsername(): string
     {
         return (string) $this->userName;
     }
