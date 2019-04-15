@@ -3,7 +3,7 @@
 {% block title %}Amazing Homepage{% endblock %}
 
 {% block body %}
-    <h1>Hello world</h1>
+    <h1>Hello {{ user ? user.firstName : 'world' }}</h1>
     <div>
         <p>
             Follow this link to
