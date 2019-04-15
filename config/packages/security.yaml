@@ -16,6 +16,14 @@ security:
             security: false
         main:
             anonymous: true
+            guard:
+                authenticators:
+                    - App\Security\LoginFormAuthenticator
+            logout:
+                path: app_logout
+            remember_me:
+                secret:   '%kernel.secret%'
+                lifetime: 5184000 # 60 days
 
             # activate different ways to authenticate
 
