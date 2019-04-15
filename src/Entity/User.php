@@ -52,6 +52,7 @@ class User implements UserInterface
      * )
      * @Assert\NotBlank()
      * @Assert\Length(
+
      *     min = 4,
      *     max = 15,
      *     minMessage = "Your username has to contain at least 4 characters",
@@ -66,6 +67,7 @@ class User implements UserInterface
      *     pattern="/^[a-zA-Z]+$/",
      *     message="Your surname has to contain only alphabetic values"
      * )
+
      *  @Assert\Length(
      *     max = 20,
      *     maxMessage="Your first name can't contain more than 20 characters"
@@ -81,6 +83,7 @@ class User implements UserInterface
      * )
      * @Assert\Length(
      *     min=3,
+
      *     max = 15,
      *     minMessage="Your first name has to contain at least 3 characters",
      *     maxMessage="Your first name can't contain more than 15 characters"
