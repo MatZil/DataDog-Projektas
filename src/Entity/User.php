@@ -10,15 +10,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
+ * @UniqueEntity(fields={"username"}, message="There is already an account with this username")
  */
 class User implements UserInterface
 {
-    public function __construct()
-    {
-        $this->roles = [
-          '{role: ROLE_USER}'
-        ];
-    }
 
     /**
      * @ORM\Id()
@@ -46,18 +41,38 @@ class User implements UserInterface
     private $password;
 
     /**
-     * @ORM\Column(type="string", length=15)
+     * @ORM\Column(type="string", length=15, unique=true)
+     * @Assert\Regex(
+     *     pattern="/^[a-zA-Z0-9]+$/",
+     *     message="Your username has to contain only alphanumeric values"
+     * )
      * @Assert\NotBlank()
+     * @Assert\Length(
+     *     min=4,
+     *     minMessage="Your username has to contain at least 4 characters"
+     * )
      */
-    private $userName;
+    private $username;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
+     * @Assert\Regex(
+     *     pattern="/^[a-zA-Z]+$/",
+     *     message="Your surname has to contain only alphabetic values"
+     * )
      */
     private $surname;
 
     /**
      * @ORM\Column(type="string", length=15)
+     * @Assert\Regex(
+     *     pattern="/^[a-zA-Z]+$/",
+     *     message="Your first name has to contain only alphabetic values"
+     * )
+     * @Assert\Length(
+     *     min=3,
+     *     minMessage="Your first name has to contain at least 3 characters"
+     * )
      * @Assert\NotBlank()
      */
     private $firstName;
@@ -87,7 +102,7 @@ class User implements UserInterface
      */
     public function getUsername(): ?string
     {
-        return $this->userName;
+        return $this->username;
     }
 
     /**
@@ -143,7 +158,7 @@ class User implements UserInterface
 
     public function setUserName(string $userName): self
     {
-        $this->userName = $userName;
+        $this->username = $userName;
 
         return $this;
     }
