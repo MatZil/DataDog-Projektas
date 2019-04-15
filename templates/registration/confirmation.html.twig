@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<h1>Hello, {{ username }}!</h1>
+    <div>
+        <p>
+            You have successfully registered to our amazing website! All you have to do now is to confirm your e-mail.
+        </p>
+    </div>
+    <form action="{{ url('confirmed') }}/{{ username }}">
+        <input type="submit" value="Confirm my e-mail" target="_blank">
+    </form>
+{% endblock %}

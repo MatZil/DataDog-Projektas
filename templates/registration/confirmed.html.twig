@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div>
+    <p>
+        Congratulations, {{ username }}! Your e-mail has just been verified.
+    </p>
+    <p>
+        <a href="{{ path('index') }}">Go to homepage</a>
+    </p>
+</div>
+{% endblock %}
