@@ -171,9 +171,9 @@ class User implements UserInterface
         // $this->plainPassword = null;
     }
 
-    public function setUsername(string $userName): self
+    public function setUsername(string $username): self
     {
-        $this->username = $userName;
+        $this->username = $username;
 
         return $this;
     }
