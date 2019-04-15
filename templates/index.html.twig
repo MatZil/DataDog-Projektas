@@ -6,7 +6,18 @@
     <h1>Hello world</h1>
     <div>
         <p>
-            Not a user yet!? Go ahead and <a href="{{ path('app_register') }}">register</a>!
+            Follow this link to
+            {% if not user %}
+                <a href="{{ path('app_login') }}">login</a>!
+            {% else %}
+                <a href="{{ path('app_logout') }}">logout</a>!
+            {% endif %}
         </p>
+        {% if not user %}
+            <p>
+                Not a user yet!? Go ahead and
+                <a href="{{ path('app_register') }}">register</a>!
+            </p>
+        {% endif %}
     </div>
 {% endblock %}
