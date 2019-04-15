@@ -3,17 +3,17 @@
 {% block title %}Amazing Homepage{% endblock %}
 
 {% block body %}
-    <h1>Hello {{ user ? user.firstName : 'world' }}</h1>
+    <h1>Hello {{ app.user ? app.user.firstName : 'world' }}</h1>
     <div>
         <p>
             Follow this link to
-            {% if not user %}
+            {% if not app.user %}
                 <a href="{{ path('app_login') }}">login</a>!
             {% else %}
                 <a href="{{ path('app_logout') }}">logout</a>!
             {% endif %}
         </p>
-        {% if not user %}
+        {% if not app.user %}
             <p>
                 Not a user yet!? Go ahead and
                 <a href="{{ path('app_register') }}">register</a>!
