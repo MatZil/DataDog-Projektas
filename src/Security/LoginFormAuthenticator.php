@@ -45,7 +45,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     public function getCredentials(Request $request)
     {
         $credentials = [
-            'email' => $request->request->get('email'),
+            'email' => $request->request->get('login'),
             'password' => $request->request->get('password'),
             'csrf_token' => $request->request->get('_csrf_token'),
         ];
@@ -67,7 +67,11 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $credentials['email']]);
 
         if (!$user) {
-            throw new CustomUserMessageAuthenticationException('Email is not registered');
+            $user = $this->entityManager->getRepository(User::class)->findOneBy(['userName' => $credentials['email']]);
+        }
+
+        if (!$user) {
+            throw new CustomUserMessageAuthenticationException('Account is not registered');
         }
 
         return $user;
