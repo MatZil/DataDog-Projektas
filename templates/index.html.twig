@@ -19,5 +19,10 @@
                 <a href="{{ path('app_register') }}">register</a>!
             </p>
         {% endif %}
+        {% if not app.user %}
+            <p>
+                Forgot your password? <a href="{{ path ('app_reset') }}">Reset it</a>!
+            </p>
+        {% endif %}
     </div>
 {% endblock %}
