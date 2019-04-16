@@ -50,8 +50,6 @@ class SecurityController extends AbstractController
         $form = $this->createForm(EmailFormType::class);
         $form->handleRequest($request);
 
-        $successMessage = "";
-
         if ($form->isSubmitted()) {
             $email = $form->get('email')->getData();
 
@@ -59,7 +57,7 @@ class SecurityController extends AbstractController
             $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
             if ($user != null) {
 
-                $successMessage = 'link has been sent to this email: ' . $email;
+                $this->addFlash('success', 'link has been sent to this email: ' . $email);
 
                 $message = (new \Swift_Message('Reset password email'))
                     ->setFrom('Datasuniai@datasuniai.com')
@@ -79,7 +77,6 @@ class SecurityController extends AbstractController
 
         return $this->render('security/resetpsw_email.html.twig', [
             'emailform' => $form->createView(),
-            'successMessage' => $successMessage,
         ]);
     }
 

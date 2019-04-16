@@ -4,9 +4,9 @@
 
 {% block body %}
     <h1 class="mb-4">Enter your email</h1>
-    {% if successMessage %}
-        <div class="alert alert-success" role="alert">{{ successMessage }}</div>
-    {% endif %}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
     {{ form_start(emailform) }}
     {{ form_end(emailform) }}
 {% endblock %}
