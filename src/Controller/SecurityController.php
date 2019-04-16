@@ -4,9 +4,8 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\Reset_PasswordFormType;
-use phpDocumentor\Reflection\DocBlock\Tags\Uses;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
-//use App\Form\RegistrationFormType;
 use App\Form\EmailFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -44,25 +43,23 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route ("/resetpassword", name="app_reset")
+     * @Route ("/reset", name="app_reset")
      */
     public function resetPassword_GetEmail(Request $request, \Swift_Mailer $mailer)
     {
-        $user = new User();
-        $user->setUsername('dummy');
-        $user->setFirstName('dummy');
         $form = $this->createForm(EmailFormType::class);
         $form->handleRequest($request);
+
+        $successMessage = "";
 
         if ($form->isSubmitted()) {
             $email = $form->get('email')->getData();
 
-            $getDoctrine = $this->getDoctrine()->getManager();
-            $useris = $getDoctrine->getRepository(User::class)->findOneBy(['email' => $email]);
-            if (!empty($useris))
-            {
+            $entityManager = $this->getDoctrine()->getManager();
+            $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
+            if ($user != null) {
 
-                echo '<p>Verification link has been sent to this email: </p>' . $email;
+                $successMessage = 'link has been sent to this email: ' . $email;
 
                 $message = (new \Swift_Message('Reset password email'))
                     ->setFrom('Datasuniai@datasuniai.com')
@@ -70,26 +67,26 @@ class SecurityController extends AbstractController
                     ->setBody(
                         $this->renderView(
                             'emails/reset_password.html.twig',
-                        ['id' => $useris->getId()]
-                        ),
+                            ['id' => $user->getId()]),
                         'text/html'
                     );
                 $mailer->send($message);
+            } else {
+                $emailError = new FormError("There is no such email registered");
+                $form->get('email')->addError($emailError);
             }
-            else
-                echo '<p>There is no such email registered</p>';
         }
-
 
         return $this->render('security/resetpsw_email.html.twig', [
             'emailform' => $form->createView(),
+            'successMessage' => $successMessage,
         ]);
     }
 
     /**
-     * @Route ("/resetPassword/{id}", name="app_changePsw")
+     * @Route ("/reset/{id}", name="app_changePsw")
      */
-    public function resetPasswordChangePassword(Request $request, $id="", UserPasswordEncoderInterface $passwordEncoder)
+    public function resetPasswordChangePassword(Request $request, $id = "", UserPasswordEncoderInterface $passwordEncoder)
     {
         $form = $this->createForm(Reset_PasswordFormType::class);
         $form->handleRequest($request);
@@ -106,10 +103,10 @@ class SecurityController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
-            echo '<p>Password has been changed!</p>';
-            echo '<a href="/">Home Page</a>';
 
+            return $this->redirectToRoute('index');
         }
+
         return $this->render('security/change_passwordByReset.html.twig', [
             'changepassform' => $form->createView(),
         ]);

@@ -3,8 +3,10 @@
 {% block title %}Reset password{% endblock %}
 
 {% block body %}
-    <h1>Enter your email</h1>
-
+    <h1 class="mb-4">Enter your email</h1>
+    {% if successMessage %}
+        <div class="alert alert-success" role="alert">{{ successMessage }}</div>
+    {% endif %}
     {{ form_start(emailform) }}
     {{ form_end(emailform) }}
 {% endblock %}
