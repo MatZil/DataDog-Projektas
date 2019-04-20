@@ -16,7 +16,7 @@ class NewEventController extends AbstractController
     /**
      * @Route("/admin/new-event", name="app_newEvent")
      */
-    public function createEvent(Request $request, GuardAuthenticatorHandler $guardHandler){
+    public function createEvent(Request $request){
         $event = new Event();
         $form = $this->createForm(EventFormType::class, $event);
         $form->handleRequest($request);
