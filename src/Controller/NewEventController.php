@@ -14,7 +14,7 @@ use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 class NewEventController extends AbstractController
 {
     /**
-     * @Route("/admin/newEvent", name="app_newEvent")
+     * @Route("/admin/new-event", name="app_newEvent")
      */
     public function createEvent(Request $request, GuardAuthenticatorHandler $guardHandler){
         $event = new Event();
