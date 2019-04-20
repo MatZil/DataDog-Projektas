@@ -30,18 +30,6 @@ class Event
     private $title;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank()
-     * @Assert\Length(
-     * min = 15,
-     * max = 255,
-     * minMessage = "Minimum length is 15 characters.",
-     * maxMessage = "Maximum length is 255 characters."
-     * )
-     */
-    private $description;
-
-    /**
      * @ORM\Column(type="datetime")
      */
     private $date;
@@ -95,7 +83,19 @@ class Event
      * @ORM\ManyToOne(targetEntity="App\Entity\Category")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $fk_Category;
+    private $category;
+
+    /**
+     * @ORM\Column(type="text", length=65535)
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     * min = 15,
+     * max = 65535,
+     * minMessage = "Minimum length is 15 characters.",
+     * maxMessage = "Maximum length is 65535 characters."
+     * )
+     */
+    private $description;
 
     public function getId(): ?int
     {
@@ -113,20 +113,6 @@ class Event
 
         return $this;
     }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(string $description): self
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-   
 
     public function getDate(): ?\DateTimeInterface
     {
@@ -188,14 +174,26 @@ class Event
         return $this;
     }
 
-    public function getFkCategory(): ?Category
+    public function getCategory(): ?Category
     {
-        return $this->fk_Category;
+        return $this->category;
     }
 
-    public function setFkCategory(?Category $fk_Category): self
+    public function setCategory(?Category $category): self
     {
-        $this->fk_Category = $fk_Category;
+        $this->category = $category;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
 
         return $this;
     }

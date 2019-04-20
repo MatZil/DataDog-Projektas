@@ -23,8 +23,7 @@ class EventFormType extends AbstractType
             ->add('description')
             ->add('date')
             ->add('location')
-            ->add('fk_Category', EntityType::class, [
-                'label' => 'Category',
+            ->add('category', EntityType::class, [
                 'class' => Category::class,
                 'choice_label' => 'name'
             ])
