@@ -11,7 +11,7 @@ class UserListController extends AbstractController
 {
 
     /**
-     * @Route("/users", name="app_userList")
+     * @Route("/admin/users", name="app_userList")
      */
     public function users()
     {
@@ -22,7 +22,7 @@ class UserListController extends AbstractController
     }
 
     /**
-     * @Route("/users/delete/{id}", name="app_userDelete")
+     * @Route("/admin/users/delete/{id}", name="app_userDelete")
      */
     public function userDelete($id)
     {
