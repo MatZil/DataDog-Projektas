@@ -4,21 +4,40 @@
 
 {% block body %}
     <h1>Registered users:</h1>
-    <table width="100%" border="1px" cellpadding="10px">
+    <table class="table table-hover">
+        <thead>
         <tr>
+            <th>ID</th>
             <th>Username</th>
             <th>Name</th>
             <th>Surname</th>
             <th>Email</th>
+            <th></th>
         </tr>
+        </thead>
         {% for user in users %}
             <tr>
-                <td> {{ user.getUsername() }} </td>
-                <td> {{ user.getFirstName() }}</td>
-                <td> {{ user.getSurname() }}</td>
-                <td> {{ user.getEmail() }}</td>
-                <td> <a href="{{ path('app_userDelete', { 'id': user.getId }) }}">Delete</a> </td>
+                <th>{{ user.id }}</th>
+                <td>{{ user.username }}</td>
+                <td>{{ user.firstName }}</td>
+                <td>{{ user.surname }}</td>
+                <td>{{ user.email }}</td>
+                <td><a class="btn btn-outline-danger btn-sm js-delete-btn" href="{{ path('app_userDelete', { 'id': user.id }) }}">Delete</a></td>
             </tr>
         {% endfor %}
         </table>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $(document).ready(function() {
+            $('.js-delete-btn').on('click', function (e) {
+                let username = $(this).parent().siblings('td')[0].innerHTML;
+                return confirm('Are you sure you would like to delete user: ' + username + '?');
+            });
+        });
+    </script>
+
 {% endblock %}
