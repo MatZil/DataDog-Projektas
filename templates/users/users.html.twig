@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Users{% endblock %}
+
+{% block body %}
+    <h1>Registered users:</h1>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>Email</th>
+            <th></th>
+        </tr>
+        </thead>
+        {% for user in users %}
+            <tr>
+                <th>{{ user.id }}</th>
+                <td>{{ user.username }}</td>
+                <td>{{ user.firstName }}</td>
+                <td>{{ user.surname }}</td>
+                <td>{{ user.email }}</td>
+                <td><a class="btn btn-outline-danger btn-sm js-delete-btn" href="{{ path('app_userDelete', { 'id': user.id }) }}">Delete</a></td>
+            </tr>
+        {% endfor %}
+        </table>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $(document).ready(function() {
+            $('.js-delete-btn').on('click', function (e) {
+                let username = $(this).parent().siblings('td')[0].innerHTML;
+                return confirm('Are you sure you would like to delete user: ' + username + '?');
+            });
+        });
+    </script>
+
+{% endblock %}

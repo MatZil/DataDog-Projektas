@@ -8,6 +8,7 @@
     <div>
         {% if is_granted('ROLE_ADMIN') %}
             <a href="{{ path("app_newEvent") }}">Create New Event</a>
+            <a href="{{ path("app_userList") }}">User list</a>
         {% endif %}
         <p>
             Follow this link to
