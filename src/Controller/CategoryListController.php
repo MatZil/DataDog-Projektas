@@ -32,28 +32,16 @@ class CategoryListController extends AbstractController
         $manager = $this->getDoctrine()->getManager();
         $category = $manager->getRepository(Category::class)->find($id);
 
-        $events = $this->getDoctrine()->getRepository(Event::class)->findAll();
+        $event = $this->getDoctrine()->getRepository(Event::class)->findOneBy(['category' => $category->getId()]);
 
-        $containsCategory=false;
-        $eventWithCategory='';
-        foreach ($events as $event)
-        {
-            if ($event->getCategory()==$category->getName())
-            {
-                $containsCategory=true;
-                $eventWithCategory=$event->getTitle();
-                break;
-            }
-        }
-
-        if ($category != null && !$containsCategory)
+        if ($category != null && !$event)
         {
             $manager->remove($category);
             $manager->flush();
         }
         else
         {
-            $this->addFlash('error', 'Category is used to describe an event " ' . $eventWithCategory . ' "');
+            $this->addFlash('error', 'Category is used to describe an event " ' . $event->getTitle() . ' "');
         }
 
         return $this->redirectToRoute("app_categoryList");
