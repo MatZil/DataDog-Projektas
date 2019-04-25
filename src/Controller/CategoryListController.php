@@ -8,7 +8,6 @@ use App\Form\CategoryFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
-use Twig\Error\Error;
 
 class CategoryListController extends AbstractController
 {
@@ -82,7 +81,6 @@ class CategoryListController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $manager->persist($category);
             $manager->flush();
 
             return $this->redirectToRoute('app_categoryList');
