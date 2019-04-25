@@ -1,23 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Amazing Homepage{% endblock %}
+{% block title %}KTU Events{% endblock %}
 
 {% block body %}
-    <h1>Hello {{ app.user ? app.user.firstName : 'world' }}</h1>
+    <h1>Hello {{ app.user ? app.user.firstName : '' }}</h1>
 
     <div>
-        {% if is_granted('ROLE_ADMIN') %}
-            <a href="{{ path("app_newEvent") }}">Create New Event</a>
-            <a href="{{ path("app_userList") }}">User list</a>
-        {% endif %}
-        <p>
-            Follow this link to
-            {% if not app.user %}
-                <a href="{{ path('app_login') }}">login</a>!
-            {% else %}
-                <a href="{{ path('app_logout') }}">logout</a>!
-            {% endif %}
-        </p>
         {% if not app.user %}
             <p>
                 Not a user yet!? Go ahead and
