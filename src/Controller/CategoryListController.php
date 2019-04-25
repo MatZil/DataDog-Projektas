@@ -35,10 +35,15 @@ class CategoryListController extends AbstractController
         $events = $this->getDoctrine()->getRepository(Event::class)->findAll();
 
         $containsCategory=false;
+        $eventWithCategory='';
         foreach ($events as $event)
         {
             if ($event->getCategory()==$category->getName())
+            {
                 $containsCategory=true;
+                $eventWithCategory=$event->getTitle();
+                break;
+            }
         }
 
         if ($category != null && !$containsCategory)
@@ -48,7 +53,7 @@ class CategoryListController extends AbstractController
         }
         else
         {
-            //Add error message here
+            $this->addFlash('error', 'Category is used to describe an event " ' . $eventWithCategory . ' "');
         }
 
         return $this->redirectToRoute("app_categoryList");
