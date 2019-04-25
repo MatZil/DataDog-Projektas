@@ -18,13 +18,14 @@
 
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-    <div class="custom-control custom-checkbox d-inline-block">
-        <input type="checkbox" name="_remember_me" id="checkbox" class="custom-control-input">
-        <label for="checkbox" class="custom-control-label">Remember me</label>
+    <div class="d-flex flex-row">
+        <div class="custom-control custom-checkbox mr-auto">
+            <input type="checkbox" name="_remember_me" id="checkbox" class="custom-control-input">
+            <label for="checkbox" class="custom-control-label">Remember me</label>
+        </div>
+        <a href="{{ path('app_reset') }}">Forgot password?</a>
     </div>
 
-    <button class="btn btn-primary float-right mt-1" type="submit">
-        Sign in
-    </button>
+    <button class="btn btn-primary float-right mt-3" type="submit">Sign in</button>
 </form>
 {% endblock %}
