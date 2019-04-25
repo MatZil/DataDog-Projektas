@@ -32,7 +32,7 @@ class CategoryListController extends AbstractController
         $manager = $this->getDoctrine()->getManager();
         $category = $manager->getRepository(Category::class)->find($id);
 
-        $event = $this->getDoctrine()->getRepository(Event::class)->findOneBy(['category' => $category->getId()]);
+        $event = $manager->getRepository(Event::class)->findOneBy(['category' => $category->getId()]);
 
         if ($category != null && !$event)
         {
