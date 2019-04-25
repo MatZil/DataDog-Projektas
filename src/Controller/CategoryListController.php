@@ -3,10 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Category;
+use App\Entity\Event;
 use App\Form\CategoryFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Twig\Error\Error;
 
 class CategoryListController extends AbstractController
 {
@@ -30,10 +32,23 @@ class CategoryListController extends AbstractController
         $manager = $this->getDoctrine()->getManager();
         $category = $manager->getRepository(Category::class)->find($id);
 
-        if ($category != null)
+        $events = $this->getDoctrine()->getRepository(Event::class)->findAll();
+
+        $containsCategory=false;
+        foreach ($events as $event)
+        {
+            if ($event->getCategory()==$category->getName())
+                $containsCategory=true;
+        }
+
+        if ($category != null && !$containsCategory)
         {
             $manager->remove($category);
             $manager->flush();
+        }
+        else
+        {
+            //Add error message here
         }
 
         return $this->redirectToRoute("app_categoryList");
