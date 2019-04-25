@@ -3,9 +3,12 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
+ * @UniqueEntity(fields={"name"}, message="There is already a category with this name")
  */
 class Category
 {
@@ -17,7 +20,12 @@ class Category
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=20)
+     * @ORM\Column(type="string", length=20, unique=true)
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *     max = 20,
+     *     maxMessage="Maximum length is 20 characters."
+     * )
      */
     private $name;
 
