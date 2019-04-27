@@ -9,7 +9,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 
 class NewEventController extends AbstractController
 {
@@ -41,8 +40,7 @@ class NewEventController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($event);
             $entityManager->flush();
-            return $this->render('index.html.twig');
-
+            return $this->redirectToRoute('index');
 
         }
 
