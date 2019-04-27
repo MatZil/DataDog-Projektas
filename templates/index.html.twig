@@ -3,19 +3,38 @@
 {% block title %}KTU Events{% endblock %}
 
 {% block body %}
-    <h1>Hello {{ app.user ? app.user.firstName : '' }}</h1>
+    <h1 class="text-center">Events List</h1>
 
-    <div>
-        {% if not app.user %}
-            <p>
-                Not a user yet!? Go ahead and
-                <a href="{{ path('app_register') }}">register</a>!
-            </p>
-        {% endif %}
-        {% if not app.user %}
-            <p>
-                Forgot your password? <a href="{{ path ('app_reset') }}">Reset it</a>!
-            </p>
-        {% endif %}
-    </div>
+    {% for event in events %}
+        <div class="card card-event my-5 mx-auto">
+{#            <a href="#" class="stretched-link"></a>#}
+            <div class="row no-gutters">
+                <div class="{% if event.photo %}col-7{% endif %}">
+                    <div class="card-body">
+                        <h2 class="card-title">{{ event.title }}</h2>
+                        <p class="card-text lead">{{ event.intro }}</p>
+                    </div>
+                </div>
+                {% if event.photo %}
+                    <div class="col-5">
+                        <img src="{{ asset('uploads/photos/') ~ event.photo }}" class="card-img p-2">
+                    </div>
+                {% endif %}
+            </div>
+            <div class="card-footer bg-white text-muted d-flex flex-wrap">
+                <div class="d-inline-flex">
+                    <i class="material-icons-outlined mr-1">location_on</i>
+                    <span class="mr-2">{{ event.location }}</span>
+                </div>
+                <div class="d-inline-flex">
+                    <i class="material-icons-outlined mr-1">access_time</i>
+                    <span class="mr-2">{{ event.date | date("Y-m-d H:i") }}</span>
+                </div>
+                <div class="d-inline-flex">
+                    <i class="material-icons-outlined mr-1">monetization_on</i>
+                    <span>{% if event.price == 0 %}FREE{% else %}{{ event.price }}&euro;{% endif %}</span>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
 {% endblock %}
