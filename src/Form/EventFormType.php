@@ -8,7 +8,6 @@ use App\Entity\Category;
 use App\Entity\Event;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -19,7 +18,8 @@ class EventFormType extends AbstractType
     {
         $builder
             ->add('title', null, [
-                'help' => 'Up to 60 characters long'
+                'help' => 'Up to 60 characters long',
+                'attr' => ['autofocus' => null]
             ])
             ->add('intro', null, [
                 'help' => 'Up to 100 characters long'
@@ -36,10 +36,9 @@ class EventFormType extends AbstractType
             ->add('price', MoneyType::class, [
                 'data' => '0'
             ])
-            ->add('photo', FileType::class, [
+            ->add('photo', null, [
                 'label' => 'Event photo',
-                'help' => '200x200px to 900x900px size',
-                'required' => false
+                'help' => '200x200px to 900x900px size'
             ])
         ;
     }
