@@ -24,17 +24,22 @@ class EventFormType extends AbstractType
             ->add('intro', null, [
                 'help' => 'Up to 100 characters long'
             ])
-            ->add('description')
+            ->add('description', null, [
+                'help' => 'Minimum of 15 characters'
+            ])
             ->add('date')
             ->add('location')
             ->add('category', EntityType::class, [
                 'class' => Category::class,
                 'choice_label' => 'name'
             ])
-            ->add('price', MoneyType::class)
+            ->add('price', MoneyType::class, [
+                'data' => '0'
+            ])
             ->add('photo', FileType::class, [
                 'label' => 'Event photo',
-                'help' => '200x200px to 900x900px size'
+                'help' => '200x200px to 900x900px size',
+                'required' => false
             ])
         ;
     }
