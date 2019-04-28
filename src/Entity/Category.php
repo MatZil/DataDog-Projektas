@@ -20,11 +20,11 @@ class Category
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=20, unique=true)
+     * @ORM\Column(type="string", length=50, unique=true)
      * @Assert\NotBlank()
      * @Assert\Length(
-     *     max = 20,
-     *     maxMessage="Maximum length is 20 characters."
+     *     max = 50,
+     *     maxMessage="Maximum length is 50 characters."
      * )
      */
     private $name;

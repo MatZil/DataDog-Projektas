@@ -16,11 +16,13 @@ class RegistrationFormType extends AbstractType
     {
         $builder
             ->add('email')
+            ->add('username')
             ->add('plainPassword', PasswordType::class, [
                 'label' => 'Password',
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
                 'mapped' => false,
+                'help' => 'At least 6 characters long',
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Please enter a password',
@@ -33,7 +35,6 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('username')
             ->add('firstName')
             ->add('surname')
         ;

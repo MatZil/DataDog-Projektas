@@ -3,6 +3,11 @@
     margin: 60px auto auto;
 }
 
+.required:after {
+    content: " *";
+    color: red;
+}
+
 @media (max-width: 600px) {
     .content {
         width: 95%;

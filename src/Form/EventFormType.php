@@ -18,8 +18,12 @@ class EventFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title')
-            ->add('intro')
+            ->add('title', null, [
+                'help' => 'Up to 60 characters long'
+            ])
+            ->add('intro', null, [
+                'help' => 'Up to 100 characters long'
+            ])
             ->add('description')
             ->add('date')
             ->add('location')
@@ -30,6 +34,7 @@ class EventFormType extends AbstractType
             ->add('price', MoneyType::class)
             ->add('photo', FileType::class, [
                 'label' => 'Event photo',
+                'help' => '200x200px to 900x900px size'
             ])
         ;
     }

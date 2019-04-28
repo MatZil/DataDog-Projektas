@@ -16,8 +16,10 @@ class CategoryFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class, array(
-                'required' => true))
+            ->add('name', TextType::class, [
+                'required' => true,
+                'help' => 'Up to 50 characters long'
+            ])
             ->add('submit', SubmitType::class);
         ;
     }
