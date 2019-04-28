@@ -11,3 +11,15 @@
     {{ form_errors(eventForm) }}
     {{ form_end(eventForm) }}
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            bsCustomFileInput.init()
+        })
+    </script>
+
+{% endblock %}

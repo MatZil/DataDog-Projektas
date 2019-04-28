@@ -22,3 +22,37 @@
 .mr--1 {
     margin-right: -.25rem !important;
 }
+
+.card-event {
+    max-width: 44rem;
+    border: none !important;
+    border-radius: .5rem !important;
+    transition: box-shadow .15s ease-in-out;
+}
+
+.card-event:hover {
+    box-shadow: 0 0 8px 5px rgba(0, 0, 0, .06);
+}
+
+.card-event:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: -5px;
+    transition: margin .15s ease-in-out;
+    background: linear-gradient(30deg, rgba(171, 38, 46, 0.2) 0%, rgba(22, 122, 195, 0.2) 100%);
+    /* border-radius: .55rem; */
+    border-radius: .6875rem;
+    z-index: -1;
+}
+
+.card-event:hover:before {
+    margin: -6px;
+}
+
+.card-event>.card-footer:last-child {
+    border-radius: 0 0 .5rem .5rem !important;
+}

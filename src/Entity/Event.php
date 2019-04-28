@@ -45,25 +45,25 @@ class Event
     private $price;
 
     /**
-     * @ORM\Column(type="string", length=30)
+     * @ORM\Column(type="string", length=50)
      * @Assert\NotBlank()
      * @Assert\Length(
      * min = 10,
-     * max = 30,
+     * max = 50,
      * minMessage = "Minimum length is 10 characters.",
-     * maxMessage = "Maximum length is 30 characters."
+     * maxMessage = "Maximum length is 50 characters."
      * )
      */
     private $location;
 
     /**
-     * @ORM\Column(type="string", length=30)
+     * @ORM\Column(type="string", length=100)
      * @Assert\NotBlank()
      * @Assert\Length(
      * min = 10,
-     * max = 30,
+     * max = 100,
      * minMessage = "Minimum length is 10 characters.",
-     * maxMessage = "Maximum length is 30 characters."
+     * maxMessage = "Maximum length is 100 characters."
      * )
      */
     private $intro;
@@ -74,7 +74,10 @@ class Event
      *     minWidth = 200,
      *     minHeight = 200,
      *     maxWidth = 900,
-     *     maxHeight = 900
+     *     maxHeight = 900,
+     *     allowPortrait = false,
+     *     maxRatio="2",
+     *     maxRatioMessage="The image ratio is too wide ({{ ratio }}). Allowed maximum ratio is {{ max_ratio }}."
      * )
      */
     private $photo;
