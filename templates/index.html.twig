@@ -3,10 +3,52 @@
 {% block title %}KTU Events{% endblock %}
 
 {% block body %}
-    <h1 class="text-center">Events List</h1>
+    <h1 class="text-center mb-4">Events List</h1>
+
+    <div class="mb-5 card">
+        <div class="card-body">
+            <form method="get" class="form-row" autocomplete="off">
+                <div class="input-group col-md-6 col-xl-3 mb-1 mb-xl-0">
+                    <div class="input-group-prepend">
+                        <i class="material-icons-outlined input-group-text">title</i>
+                    </div>
+                    <input type="text" class="form-control" name="title" value="{{ app.request.get('title') }}" placeholder="Title">
+                </div>
+                <div class="input-group col-md-6 col-xl-2 mb-1 mb-xl-0">
+                    <div class="input-group-prepend">
+                        <i class="material-icons-outlined input-group-text">category</i>
+                    </div>
+                    <select class="custom-select" name="category">
+                        <option {{ app.request.get('category') ? '' : 'selected' }}>Category</option>
+                        {% for category in categories %}
+                            <option {{ app.request.get('category') == category.id ? 'selected' }}
+                                    value="{{ category.id }}">{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="input-group col-md-6 col-xl-4 mb-1 mb-xl-0">
+                    <div class="input-group-prepend">
+                        <i class="material-icons-outlined input-group-text">date_range</i>
+                    </div>
+                    <input type="date" class="form-control" name="start-date" value="{{ app.request.get('start-date') }}">
+                    <input type="date" class="form-control" name="end-date" value="{{ app.request.get('end-date') }}">
+                </div>
+                <div class="input-group col-md-4 col-xl-2 mb-1 mb-xl-0">
+                    <div class="input-group-prepend">
+                        <i class="material-icons-outlined input-group-text">attach_money</i>
+                    </div>
+                    <input type="text" class="form-control" name="min-price" value="{{ app.request.get('min-price') }}" placeholder="Min">
+                    <input type="text" class="form-control" name="max-price" value="{{ app.request.get('max-price') }}" placeholder="Max">
+                </div>
+                <div class="text-right col-md-2 col-xl-1">
+                    <button type="submit" class="btn btn-outline-primary">Filter</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     {% for event in events %}
-        <div class="card card-event my-5 mx-auto">
+        <div class="card card-event mb-5 mx-auto">
 {#            <a href="#" class="stretched-link"></a>#}
             <div class="row no-gutters">
                 <div class="{% if event.photo %}col-7{% endif %}">
@@ -32,9 +74,26 @@
                 </div>
                 <div class="d-inline-flex">
                     <i class="material-icons-outlined mr-1">monetization_on</i>
-                    <span>{% if event.price == 0 %}FREE{% else %}{{ event.price }}&euro;{% endif %}</span>
+                    <span>{{ event.price == 0 ? 'FREE' : (event.price | number_format(2) ~ ' &euro;') | raw}}</span>
                 </div>
             </div>
         </div>
     {% endfor %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        jQuery(document).ready(function ($) {
+            $("form").submit(function () {
+                $(this).find(":input").filter(function () {
+                    return !this.value || this.value === 'Category';
+                }).attr("disabled", "disabled");
+                return true;
+            });
+            $("form").find(":input").prop("disabled", false);
+        });
+    </script>
+
 {% endblock %}

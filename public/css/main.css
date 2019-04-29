@@ -1,17 +1,17 @@
 .content {
-    width: 60%;
-    margin: 60px auto auto;
+    width: 65%;
+    margin: 60px auto;
 }
 
-label.required::after {
-    content: " *";
-    color: red;
-}
-
-@media (max-width: 600px) {
+@media (max-width: 575.98px) {
     .content {
         width: 95%;
     }
+}
+
+label.required::before {
+    content: "* ";
+    color: red;
 }
 
 .form-login {
