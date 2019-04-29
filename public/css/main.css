@@ -28,6 +28,10 @@ label.required::before {
     margin-right: -.25rem !important;
 }
 
+.card-rounded {
+    border-radius: .5rem !important;
+}
+
 .card-event {
     max-width: 44rem;
     border: none !important;
@@ -49,8 +53,7 @@ label.required::before {
     margin: -5px;
     transition: margin .15s ease-in-out;
     background: linear-gradient(30deg, rgba(171, 38, 46, 0.2) 0%, rgba(22, 122, 195, 0.2) 100%);
-    /* border-radius: .55rem; */
-    border-radius: .6875rem;
+     border-radius: calc(.5rem + 3px);
     z-index: -1;
 }
 
