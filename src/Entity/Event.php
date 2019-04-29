@@ -18,13 +18,13 @@ class Event
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=30)
+     * @ORM\Column(type="string", length=60)
      * @Assert\NotBlank()
      * @Assert\Length(
-     * min = 6,
-     * max = 30,
-     * minMessage = "Minimum length is 6 characters.",
-     * maxMessage = "Maximum length is 30 characters."
+     * min = 4,
+     * max = 60,
+     * minMessage = "Minimum length is 4 characters.",
+     * maxMessage = "Maximum length is 60 characters."
      * )
      */
     private $title;
@@ -45,13 +45,13 @@ class Event
     private $price;
 
     /**
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(type="string", length=100)
      * @Assert\NotBlank()
      * @Assert\Length(
      * min = 10,
-     * max = 50,
+     * max = 100,
      * minMessage = "Minimum length is 10 characters.",
-     * maxMessage = "Maximum length is 50 characters."
+     * maxMessage = "Maximum length is 100 characters."
      * )
      */
     private $location;
@@ -69,7 +69,7 @@ class Event
     private $intro;
 
     /**
-     * @ORM\Column(type="string", length=70, nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Image(
      *     minWidth = 200,
      *     minHeight = 200,

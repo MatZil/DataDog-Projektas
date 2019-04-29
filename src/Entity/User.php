@@ -45,7 +45,7 @@ class User implements UserInterface
     private $password;
 
     /**
-     * @ORM\Column(type="string", length=15, unique=true)
+     * @ORM\Column(type="string", length=20, unique=true)
      * @Assert\Regex(
      *     pattern="/^[a-zA-Z0-9]+$/",
      *     message="Your username has to contain only alphanumeric values"
@@ -54,29 +54,29 @@ class User implements UserInterface
      * @Assert\Length(
 
      *     min = 4,
-     *     max = 15,
+     *     max = 20,
      *     minMessage = "Your username has to contain at least 4 characters",
-     *     maxMessage = "Your username can't contain more than 15 characters"
+     *     maxMessage = "Your username can't contain more than 20 characters"
      * )
      */
     private $username;
 
     /**
-     * @ORM\Column(type="string", length=20, nullable=true)
+     * @ORM\Column(type="string", length=40, nullable=true)
      * @Assert\Regex(
      *     pattern="/^[a-zA-Z]+$/",
      *     message="Your surname has to contain only alphabetic values"
      * )
 
      *  @Assert\Length(
-     *     max = 20,
-     *     maxMessage="Your first name can't contain more than 20 characters"
+     *     max = 40,
+     *     maxMessage="Your surname can't contain more than 40 characters"
      * )
      */
     private $surname;
 
     /**
-     * @ORM\Column(type="string", length=15)
+     * @ORM\Column(type="string", length=20)
      * @Assert\Regex(
      *     pattern="/^[a-zA-Z]+$/",
      *     message="Your first name has to contain only alphabetic values"
@@ -84,9 +84,9 @@ class User implements UserInterface
      * @Assert\Length(
      *     min=3,
 
-     *     max = 15,
+     *     max = 20,
      *     minMessage="Your first name has to contain at least 3 characters",
-     *     maxMessage="Your first name can't contain more than 15 characters"
+     *     maxMessage="Your first name can't contain more than 20 characters"
      * )
      * @Assert\NotBlank()
      */

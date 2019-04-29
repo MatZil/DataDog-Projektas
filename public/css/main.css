@@ -3,6 +3,11 @@
     margin: 60px auto auto;
 }
 
+label.required::after {
+    content: " *";
+    color: red;
+}
+
 @media (max-width: 600px) {
     .content {
         width: 95%;
@@ -34,7 +39,7 @@
     box-shadow: 0 0 8px 5px rgba(0, 0, 0, .06);
 }
 
-.card-event:before {
+.card-event::before {
     content: '';
     position: absolute;
     top: 0;
@@ -49,7 +54,7 @@
     z-index: -1;
 }
 
-.card-event:hover:before {
+.card-event:hover::before {
     margin: -6px;
 }
 
