@@ -1,17 +1,17 @@
 .content {
-    width: 60%;
-    margin: 60px auto auto;
+    width: 65%;
+    margin: 60px auto;
 }
 
-label.required::after {
-    content: " *";
-    color: red;
-}
-
-@media (max-width: 600px) {
+@media (max-width: 575.98px) {
     .content {
         width: 95%;
     }
+}
+
+label.required::before {
+    content: "* ";
+    color: red;
 }
 
 .form-login {
@@ -26,6 +26,10 @@ label.required::after {
 
 .mr--1 {
     margin-right: -.25rem !important;
+}
+
+.card-rounded {
+    border-radius: .5rem !important;
 }
 
 .card-event {
@@ -49,8 +53,7 @@ label.required::after {
     margin: -5px;
     transition: margin .15s ease-in-out;
     background: linear-gradient(30deg, rgba(171, 38, 46, 0.2) 0%, rgba(22, 122, 195, 0.2) 100%);
-    /* border-radius: .55rem; */
-    border-radius: .6875rem;
+     border-radius: calc(.5rem + 3px);
     z-index: -1;
 }
 

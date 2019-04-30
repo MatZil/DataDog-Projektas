@@ -19,6 +19,32 @@ class EventRepository extends ServiceEntityRepository
         parent::__construct($registry, Event::class);
     }
 
+    public function findByCriteria($criteria)
+    {
+        $qb = $this->createQueryBuilder('e');
+
+        foreach ($criteria as $cr) {
+            switch ($cr['type']) {
+                case 'eq':
+                    if (!isset($cr['value'])) break;
+                    $qb = $qb->andWhere("e." . $cr['property'] . " = '" . $cr['value'] . "'");
+                    break;
+
+                case 'like':
+                    if (!isset($cr['value'])) break;
+                    $qb = $qb->andWhere("e." . $cr['property'] . " LIKE '" . $cr['value'] . "'");
+                    break;
+
+                case 'range':
+                    if (!isset($cr['value1']) || !isset($cr['value2'])) break;
+                    $qb = $qb->andWhere("e." . $cr['property'] . " BETWEEN '" . $cr['value1'] . "' AND '" . $cr['value2'] . "'");
+                    break;
+            }
+        }
+
+        return $qb->orderBy('e.date', 'ASC')->getQuery()->getResult();
+    }
+
     // /**
     //  * @return Event[] Returns an array of Event objects
     //  */
