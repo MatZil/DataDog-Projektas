@@ -64,7 +64,7 @@ class SecurityController extends AbstractController
                     ->setTo($email)
                     ->setBody(
                         $this->renderView(
-                            'emails/reset_password.html.twig',
+                            'security/reset_password.html.twig',
                             ['id' => $user->getId()]),
                         'text/html'
                     );
