@@ -1,21 +1,100 @@
+
 {% extends 'base.html.twig' %}
 
 {% block title %}KTU Events{% endblock %}
 
 {% block body %}
-    <h1>Hello {{ app.user ? app.user.firstName : '' }}</h1>
+    <h1 class="text-center mb-4">Events List</h1>
 
-    <div>
-        {% if not app.user %}
-            <p>
-                Not a user yet!? Go ahead and
-                <a href="{{ path('app_register') }}">register</a>!
-            </p>
-        {% endif %}
-        {% if not app.user %}
-            <p>
-                Forgot your password? <a href="{{ path ('app_reset') }}">Reset it</a>!
-            </p>
-        {% endif %}
+    <div class="mb-5 card card-rounded">
+        <div class="card-body">
+            <form method="get" class="form-row" autocomplete="off">
+                <div class="input-group col-md-6 col-xl-3 mb-1 mb-xl-0">
+                    <div class="input-group-prepend">
+                        <i class="material-icons-outlined input-group-text">title</i>
+                    </div>
+                    <input type="text" class="form-control" name="title" value="{{ app.request.get('title') }}" placeholder="Title">
+                </div>
+                <div class="input-group col-md-6 col-xl-2 mb-1 mb-xl-0">
+                    <div class="input-group-prepend">
+                        <i class="material-icons-outlined input-group-text">category</i>
+                    </div>
+                    <select class="custom-select" name="category">
+                        <option {{ app.request.get('category') ? '' : 'selected' }}>Category</option>
+                        {% for category in categories %}
+                            <option {{ app.request.get('category') == category.id ? 'selected' }}
+                                    value="{{ category.id }}">{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="input-group col-md-6 col-xl-4 mb-1 mb-xl-0">
+                    <div class="input-group-prepend">
+                        <i class="material-icons-outlined input-group-text">date_range</i>
+                    </div>
+                    <input type="date" class="form-control" name="start-date" value="{{ app.request.get('start-date') }}">
+                    <input type="date" class="form-control" name="end-date" value="{{ app.request.get('end-date') }}">
+                </div>
+                <div class="input-group col-md-4 col-xl-2 mb-1 mb-xl-0">
+                    <div class="input-group-prepend">
+                        <i class="material-icons-outlined input-group-text">attach_money</i>
+                    </div>
+                    <input type="text" class="form-control" name="min-price" value="{{ app.request.get('min-price') }}" placeholder="Min">
+                    <input type="text" class="form-control" name="max-price" value="{{ app.request.get('max-price') }}" placeholder="Max">
+                </div>
+                <div class="text-right col-md-2 col-xl-1">
+                    <button type="submit" class="btn btn-outline-primary">Filter</button>
+                </div>
+            </form>
+        </div>
     </div>
+
+    {% for event in events %}
+        <div class="card card-event mb-5 mx-auto">
+            <a href="{{ path('app_eventDetails', {'slug':event.id}) }}" class="stretched-link"></a>
+            <div class="row no-gutters">
+                <div class="{% if event.photo %}col-7{% endif %}">
+                    <div class="card-body">
+                        <h2 class="card-title">{{ event.title }}</h2>
+                        <p class="card-text lead">{{ event.intro }}</p>
+                    </div>
+                </div>
+                {% if event.photo %}
+                    <div class="col-5">
+                        <img src="{{ asset('uploads/photos/') ~ event.photo }}" class="card-img p-2">
+                    </div>
+                {% endif %}
+            </div>
+            <div class="card-footer bg-white text-muted d-flex flex-wrap">
+                <div class="d-inline-flex">
+                    <i class="material-icons-outlined mr-1">location_on</i>
+                    <span class="mr-2">{{ event.location }}</span>
+                </div>
+                <div class="d-inline-flex">
+                    <i class="material-icons-outlined mr-1">access_time</i>
+                    <span class="mr-2">{{ event.date | date("Y-m-d H:i") }}</span>
+                </div>
+                <div class="d-inline-flex">
+                    <i class="material-icons-outlined mr-1">monetization_on</i>
+                    <span>{{ event.price == 0 ? 'FREE' : (event.price | number_format(2) ~ ' &euro;') | raw}}</span>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        jQuery(document).ready(function ($) {
+            $("form").submit(function () {
+                $(this).find(":input").filter(function () {
+                    return !this.value || this.value === 'Category';
+                }).attr("disabled", "disabled");
+                return true;
+            });
+            $("form").find(":input").prop("disabled", false);
+        });
+    </script>
+
 {% endblock %}
