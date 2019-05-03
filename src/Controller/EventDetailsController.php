@@ -5,7 +5,6 @@ namespace App\Controller;
 
 use App\Entity\Comment;
 use App\Entity\Event;
-use App\Entity\User;
 use App\Form\CommentFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,10 +31,12 @@ class EventDetailsController extends AbstractController
     }
 
     /**
-     * @Route("/events/add_comment/{slug}", name="app_addComment")
+     * @Route("/events/{slug}/add_comment", name="app_addComment")
      */
-    public function addComment(Request $request, $slug, UserInterface $user)
+    public function addComment(Request $request, $slug)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+
         $comment = new Comment();
         $form = $this->createForm(CommentFormType::class, $comment);
         $form->handleRequest($request);
@@ -45,6 +46,8 @@ class EventDetailsController extends AbstractController
 
             $rep = $this->getDoctrine()->getRepository(Event::class);
             $event = $rep->findOneBySomeField($slug);
+            $user = $this->getUser();
+
             $comment->setEvent($event);
             $comment->setUser($user);
 
