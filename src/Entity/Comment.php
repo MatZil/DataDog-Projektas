@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
@@ -41,18 +40,6 @@ class Comment
      * @ORM\JoinColumn(nullable=false)
      */
     private $event;
-
-    public function __construct() {
-        $this->setCreatedAt(new \DateTime());
-        $this->setUpdatedAt(new \DateTime());
-    }
-
-    /**
-     * @ORM\PreUpdate
-     */
-    public function setUpdatedAtValue() {
-        $this->setUpdatedAt(new \DateTime());
-    }
 
     public function getId(): ?int
     {
