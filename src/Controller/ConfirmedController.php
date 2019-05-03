@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ConfirmedController extends AbstractController
 {
     /**
-     * @Route("/confirmed/{slug}", name="confirmed")
+     * @Route("/confirmed/{slug}", name="app_confirmed")
      */
     public function confirmed($slug = "") : Response
     {

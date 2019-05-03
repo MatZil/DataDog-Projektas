@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<div class="">
+    <h2 class="card-title center">{{ event.title }}</h2>
+    <div class="row">
+        <div class="{% if event.photo %}col-7{% endif %}">
+            <div class="">
+                <p>Category: {{ event.category }}</p>
+                <p>Date and time: {{ event.date | date("Y-m-d H:i") }}</p>
+                <p>Location: {{ event.location }}</p>
+                <p>Price: {{ event.price == 0 ? 'FREE' : (event.price | number_format(2) ~ ' &euro;') | raw}}</p>
+                <p class="long-text">{{ event.description }}</p>
+            </div>
+        </div>
+        {% if event.photo %}
+            <div class="col-5">
+                <img src="{{ asset('uploads/photos/') ~ event.photo }}" class="card-img p-2">
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
