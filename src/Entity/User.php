@@ -95,7 +95,7 @@ class User implements UserInterface
     private $firstName;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="User")
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="user")
      */
     private $comments;
 
