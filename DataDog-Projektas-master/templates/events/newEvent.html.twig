@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create Event{% endblock %}
+
+{% block body %}
+    <h1 class="text-center">Create Event</h1>
+
+    {{ form_start(eventForm) }}
+    {{ form_widget(eventForm) }}
+    <button class="btn btn-primary" formnovalidate>Create Event</button>
+    {{ form_errors(eventForm) }}
+    {{ form_end(eventForm) }}
+{% endblock %}

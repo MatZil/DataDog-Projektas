@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}KTU Events{% endblock %}
+
+{% block body %}
+    <h1>Hello {{ app.user ? app.user.firstName : '' }}</h1>
+
+    <div>
+        {% if not app.user %}
+            <p>
+                Not a user yet!? Go ahead and
+                <a href="{{ path('app_register') }}">register</a>!
+            </p>
+        {% endif %}
+        {% if not app.user %}
+            <p>
+                Forgot your password? <a href="{{ path ('app_reset') }}">Reset it</a>!
+            </p>
+        {% endif %}
+    </div>
+{% endblock %}
