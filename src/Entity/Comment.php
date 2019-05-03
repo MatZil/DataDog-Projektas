@@ -19,7 +19,7 @@ class Comment
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="Comments")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="comments")
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
@@ -34,6 +34,18 @@ class Comment
      * @ORM\JoinColumn(nullable=false)
      */
     private $event;
+
+    public function __construct() {
+        $this->setCreatedAt(new \DateTime());
+        $this->setUpdatedAt(new \DateTime());
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function setUpdatedAtValue() {
+        $this->setUpdatedAt(new \DateTime());
+    }
 
     public function getId(): ?int
     {

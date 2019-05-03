@@ -103,7 +103,7 @@ class Event
     private $description;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="Event")
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="event")
      */
     private $comments;
 

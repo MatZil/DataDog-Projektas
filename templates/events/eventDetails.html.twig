@@ -9,6 +9,14 @@
             <p>Location: {{ event.location }}</p>
             <p>Price: {{ event.price == 0 ? 'FREE' : (event.price | number_format(2) ~ ' &euro;') | raw}}</p>
             <p class="text-break">{{ event.description }}</p>
+            {#{% if event.comments %} #}
+            {#<p>{{ event.comments|length  }}</p>#}
+            {% for comment in event.comments %}
+                <p><b>Author:</b> {{ comment.user.firstname }} ({{ comment.user.username }}) <small>{{ comment.createdAt | date("Y-m-d H:i") }}</small></p>
+                <p>{{ comment.content }}</p>
+            {% endfor %}
+            <a class="btn btn-primary btn-bg float-left mb-2" href="{{ path('app_addComment', { 'slug': event.id }) }}">Add comment</a>
+            {#{% endif %}#}
         </div>
         {% if event.photo %}
             <div class="col-5">

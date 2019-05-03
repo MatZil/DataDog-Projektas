@@ -3,9 +3,14 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Event;
+use App\Entity\User;
+use App\Form\CommentFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class EventDetailsController extends AbstractController
 {
@@ -23,6 +28,35 @@ class EventDetailsController extends AbstractController
 
         return $this->render('events/eventDetails.html.twig', [
             'event' => $event
+        ]);
+    }
+
+    /**
+     * @Route("/events/add_comment/{slug}", name="app_addComment")
+     */
+    public function addComment(Request $request, $slug, UserInterface $user)
+    {
+        $comment = new Comment();
+        $form = $this->createForm(CommentFormType::class, $comment);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+
+            $rep = $this->getDoctrine()->getRepository(Event::class);
+            $event = $rep->findOneBySomeField($slug);
+            $comment->setEvent($event);
+            $comment->setUser($user);
+
+            $entityManager->persist($comment);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_eventDetails', [
+                'slug' => $slug]);
+        }
+
+        return $this->render('events/comment_form.html.twig', [
+            'addcommentform' => $form->createView(),
         ]);
     }
 
