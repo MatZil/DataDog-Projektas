@@ -1,12 +1,5 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-    <style>
-        .gap-50 {
-            width:100%;
-            height:50px;
-        }
-    </style>
-
 <div class="">
     <h1 class="text-center mb-5">{{ event.title }}</h1>
     <div class="row">
@@ -16,9 +9,6 @@
             <p>Location: {{ event.location }}</p>
             <p>Price: {{ event.price == 0 ? 'FREE' : (event.price | number_format(2) ~ ' &euro;') | raw}}</p>
             <p class="text-break">{{ event.description }}</p>
-            {#{% if event.comments %} #}
-            {#<p>{{ event.comments|length  }}</p>#}
-            {#{% endif %}#}
         </div>
         {% if event.photo %}
             <div class="col-5">
@@ -29,10 +19,9 @@
 </div>
     <div>
         <h3>Comments: ({{ event.comments|length  }})</h3>
-        <a class="btn btn-primary btn-bg float-left mb-2" href="{{ path('app_addComment', { 'slug': event.id }) }}">Add comment</a>
-        <div class="gap-50"></div>
+        <a class="btn btn-primary float-right btn-bg mb-2" href="{{ path('app_addComment', { 'slug': event.id }) }}">Add comment</a>
         {% for comment in event.comments %}
-            <div class="card">
+            <div class="card w-100 mb-2">
                 <h5 class="card-header">{{ comment.user.firstname }} ({{ comment.user.username }}) <small class="text-muted">{{ comment.createdAt | date("Y-m-d H:i") }}</small></h5>
                 <div class="card-body">
                     <p class="card-text">{{ comment.content }}</p>
