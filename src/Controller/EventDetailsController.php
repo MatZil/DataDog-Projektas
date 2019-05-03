@@ -14,9 +14,15 @@ class EventDetailsController extends AbstractController
      */
     public function event($slug = "")
     {
-        $rep = $repository = $this->getDoctrine()->getRepository(Event::class);
+        $rep = $this->getDoctrine()->getRepository(Event::class);
+        $event = $rep->findOneBySomeField($slug);
+
+        if ($event == null) {
+            return $this->redirectToRoute("index");
+        }
+
         return $this->render('events/eventDetails.html.twig', [
-            'event' => $rep->findOneBySomeField($slug)
+            'event' => $event
         ]);
     }
 
