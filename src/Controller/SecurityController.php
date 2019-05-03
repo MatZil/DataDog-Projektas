@@ -113,10 +113,11 @@ class SecurityController extends AbstractController
         ]);
     }
     /**
-     * @Route ("/change/{id}", name="app_changePassword")
+     * @Route ("/change", name="app_changePassword")
      */
-    public function ChangePassword(Request $request,$id = "", UserPasswordEncoderInterface $passwordEncoder)
+    public function ChangePassword(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $form = $this->createForm(Change_PasswordFormType::class);
         $form->handleRequest($request);
