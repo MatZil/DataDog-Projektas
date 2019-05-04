@@ -79,6 +79,13 @@
             </div>
         </div>
     {% endfor %}
+    {% if not events %}
+        <div class="card card-event mx-auto">
+            <div class="card-body">
+                <p class="card-text text-center lead">No Events Were Found</p>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block javascripts %}
