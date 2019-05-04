@@ -122,20 +122,25 @@ class SecurityController extends AbstractController
         $form = $this->createForm(Change_PasswordFormType::class);
         $form->handleRequest($request);
         $user = $this->getUser();
-        $id = $user->getId();
-        $user = $this->getDoctrine()->getRepository(User::class)->find($id);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->setPassword(
-                $passwordEncoder->encodePassword(
-                    $user, $form->get('NewPassword')->getData()
-                )
-            );
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
+            if ($passwordEncoder->isPasswordValid($user, $form->get('CurrentPassword')->getData()))
+            {
+                $user->setPassword(
+                    $passwordEncoder->encodePassword(
+                        $user, $form->get('NewPassword')->getData()
+                    )
+                );
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($user);
+                $entityManager->flush();
 
-            return $this->redirectToRoute('index');
+                return $this->redirectToRoute('index');
+            }
+            else
+            {
+                $this->addFlash('error', 'Current password is incorrect!');
+            }
         }
 
 
