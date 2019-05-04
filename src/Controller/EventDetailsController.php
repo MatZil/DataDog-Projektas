@@ -16,7 +16,7 @@ class EventDetailsController extends AbstractController
     /**
      * @Route("/events/{slug}", name="app_eventDetails")
      */
-    public function event($slug = "")
+    public function event($slug)
     {
         $rep = $this->getDoctrine()->getRepository(Event::class);
         $event = $rep->findOneBySomeField($slug);
