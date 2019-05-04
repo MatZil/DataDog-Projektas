@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\Change_PasswordFormType;
 use App\Form\Reset_PasswordFormType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+
 
 class SecurityController extends AbstractController
 {
@@ -85,6 +87,7 @@ class SecurityController extends AbstractController
      */
     public function resetPasswordChangePassword(Request $request, $id = "", UserPasswordEncoderInterface $passwordEncoder)
     {
+
         $form = $this->createForm(Reset_PasswordFormType::class);
         $form->handleRequest($request);
 
@@ -95,6 +98,7 @@ class SecurityController extends AbstractController
                 $passwordEncoder->encodePassword(
                     $user,
                     $form->get('newPassword')->getData()
+
                 )
             );
             $entityManager = $this->getDoctrine()->getManager();
@@ -107,5 +111,42 @@ class SecurityController extends AbstractController
         return $this->render('security/change_passwordByReset.html.twig', [
             'changepassform' => $form->createView(),
         ]);
+    }
+    /**
+     * @Route ("/change", name="app_changePassword")
+     */
+    public function ChangePassword(Request $request, UserPasswordEncoderInterface $passwordEncoder)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $form = $this->createForm(Change_PasswordFormType::class);
+        $form->handleRequest($request);
+        $user = $this->getUser();
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            if ($passwordEncoder->isPasswordValid($user, $form->get('CurrentPassword')->getData()))
+            {
+                $user->setPassword(
+                    $passwordEncoder->encodePassword(
+                        $user, $form->get('NewPassword')->getData()
+                    )
+                );
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                return $this->redirectToRoute('index');
+            }
+            else
+            {
+                $this->addFlash('error', 'Current password is incorrect!');
+            }
+        }
+
+
+        return $this->render('security/change_password.html.twig', [
+            'changepass' => $form->createView(),
+        ]);
+
     }
 }

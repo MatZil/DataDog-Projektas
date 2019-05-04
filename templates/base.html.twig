@@ -54,12 +54,18 @@
                                 <span class="mr-auto">Event categories</span>
                                 <i class="material-icons-outlined ml-2">view_list</i>
                             </a>
+                            <div class="dropdown-divider"></div>
                         {% endif %}
+                        <a class="dropdown-item d-flex" href="{{ path('app_changePassword') }}">
+                            <span class="mr-auto">Settings</span>
+                            <i class="material-icons-outlined ml-2">settings</i>
+                        </a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item d-flex" href="{{ path('app_logout') }}">
                             <span class="mr-auto">Logout</span>
                             <i class="material-icons-outlined ml-2">exit_to_app</i>
                         </a>
+
                     </div>
                 </li>
             {% endif %}
