@@ -63,6 +63,26 @@ class EventDetailsController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/admin/events/{eventId}/delete_comment/{commentId}", name="app_deleteComment")
+     */
+    public function commentDelete($commentId, $eventId)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+
+        $manager = $this->getDoctrine()->getManager();
+        $comment = $manager->getRepository(Comment::class)->find($commentId);
+
+        if ($comment != null)
+        {
+            $manager->remove($comment);
+            $manager->flush();
+        }
+
+        return $this->redirectToRoute('app_eventDetails', [
+            'slug' => $eventId]);
+    }
+
 
 
 }

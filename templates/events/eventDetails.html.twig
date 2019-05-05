@@ -21,7 +21,15 @@
         <a class="btn btn-primary btn-bg float-right mb-2" href="{{ path('app_addComment', { 'slug': event.id }) }}">Add comment</a>
         {% for comment in event.comments %}
             <div class="card w-100 mb-2">
-                <h5 class="card-header">{{ comment.user.firstname }} ({{ comment.user.username }}) <small class="text-muted">{{ comment.createdAt | date("Y-m-d H:i", "Europe/Vilnius") }}</small></h5>
+                <h5 class="card-header">
+                    {{ comment.user.firstname }} ({{ comment.user.username }})
+                    <small class="text-muted">
+                        {{ comment.createdAt | date("Y-m-d H:i", "Europe/Vilnius") }}
+                    </small>
+                    {% if is_granted('ROLE_ADMIN') %}
+                    <a class="btn btn-danger btn-sm float-right mb-2" href="{{ path('app_deleteComment', { 'commentId': comment.id, 'eventId': event.id }) }}">Delete</a>
+                    {% endif %}
+                </h5>
                 <div class="card-body">
                     <p class="card-text">{{ comment.content }}</p>
                 </div>
