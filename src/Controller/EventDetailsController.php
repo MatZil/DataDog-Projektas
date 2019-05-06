@@ -9,7 +9,6 @@ use App\Form\CommentFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class EventDetailsController extends AbstractController
 {
@@ -68,8 +67,6 @@ class EventDetailsController extends AbstractController
      */
     public function commentDelete($commentId, $eventId)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-
         $manager = $this->getDoctrine()->getManager();
         $comment = $manager->getRepository(Comment::class)->find($commentId);
 
