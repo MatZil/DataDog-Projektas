@@ -9,7 +9,6 @@ use App\Form\CommentFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class EventDetailsController extends AbstractController
 {
@@ -61,6 +60,24 @@ class EventDetailsController extends AbstractController
         return $this->render('events/comment_form.html.twig', [
             'addcommentform' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/admin/events/{eventId}/delete_comment/{commentId}", name="app_deleteComment")
+     */
+    public function commentDelete($commentId, $eventId)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $comment = $manager->getRepository(Comment::class)->find($commentId);
+
+        if ($comment != null)
+        {
+            $manager->remove($comment);
+            $manager->flush();
+        }
+
+        return $this->redirectToRoute('app_eventDetails', [
+            'slug' => $eventId]);
     }
 
 
