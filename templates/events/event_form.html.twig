@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% if isNew %}Create{% else %}Edit{% endif %} Event{% endblock %}
+
+{% block body %}
+    <h1 class="text-center">{% if isNew %}Create{% else %}Edit{% endif %} Event</h1>
+
+    {{ form_start(eventForm) }}
+    {{ form_widget(eventForm) }}
+    {% if photo %}
+        <p>
+            <input type="checkbox" name="deleteCheckBox"> Delete Photo
+        </p>
+        <img src="{{ asset('uploads/photos/') ~ photo }}" class="img-fluid mb-4"><br>
+    {% endif %}
+    <input type="hidden" name="eventPhoto" value={{ photo }}>
+    <button class="btn btn-primary">{% if isNew %}Create{% else %}Edit{% endif %} Event</button>
+    {{ form_end(eventForm) }}
+
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            bsCustomFileInput.init()
+        })
+    </script>
+
+
+
+{% endblock %}

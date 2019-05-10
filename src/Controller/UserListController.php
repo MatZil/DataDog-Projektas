@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -26,7 +27,14 @@ class UserListController extends AbstractController
     {
         $manager = $this->getDoctrine()->getManager();
         $user = $manager->getRepository(User::class)->find($id);
-
+        $comments = $manager->getRepository(Comment::class)->findBy([
+           'user' => $user->getId()
+        ]);
+        foreach($comments as $comment){
+            $comment->setUser(null);
+            $manager->persist($comment);
+            $manager->flush();
+        }
         if ($user != null)
         {
             $manager->remove($user);

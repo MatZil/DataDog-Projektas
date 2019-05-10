@@ -1,6 +1,13 @@
 {% extends 'base.html.twig' %}
+{% block title %}{{ event.title }}{% endblock %}
 {% block body %}
-<h1 class="text-center mb-5">{{ event.title }}</h1>
+<h1 class="text-center mb-5">{{ event.title }}
+    {% if is_granted('ROLE_ADMIN') %}
+        <a class="btn btn-danger float-right js-delete-btn" href="{{ path('app_deleteEvent', {'eventID':event.id}) }}">Delete Event</a>
+        <a class="btn btn-primary float-right"  href="{{ path('app_eventForm', {'action':'edit'}) }}/{{ event.id }}">Edit Event</a>&thinsp;
+    {% endif %}
+</h1>
+
 <div class="row">
     <div class="col-7">
         <p>Category: {{ event.category }}</p>
@@ -19,17 +26,21 @@
     <div>
         <h3>Comments: ({{ event.comments | length }})</h3>
         <div class="text-right">
-            <a class="btn btn-primary btn-bg mb-2" href="{{ path('app_addComment', { 'slug': event.id }) }}">Add comment</a>
+            <a class="btn btn-primary btn-bg mb-2" href="{{ path('app_addComment', { 'eventID': event.id }) }}">Add comment</a>
         </div>
         {% for comment in event.comments %}
             <div class="card mb-2">
                 <h5 class="card-header">
+                    {% if comment.user %}
                     {{ comment.user.firstname }} ({{ comment.user.username }})
+                    {% else %}
+                        DELETED USER
+                    {% endif %}
                     <small class="text-muted">
                         {{ comment.createdAt | date("Y-m-d H:i", "Europe/Vilnius") }}
                     </small>
                     {% if is_granted('ROLE_ADMIN') %}
-                        <a class="btn btn-danger btn-sm float-right" href="{{ path('app_deleteComment', { 'commentId': comment.id, 'eventId': event.id }) }}">Delete</a>
+                        <a class="btn btn-danger btn-sm float-right js-delete-comm" href="{{ path('app_deleteComment', { 'commentID': comment.id, 'eventID': event.id }) }}">Delete</a>
                     {% endif %}
                 </h5>
                 <div class="card-body">
@@ -38,5 +49,27 @@
             </div>
         {% endfor %}
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $(document).ready(function() {
+            $('.js-delete-btn').on('click', function () {
+                return confirm('Are you sure you would like to delete this event?');
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $('.js-delete-comm').on('click', function () {
+                return confirm('Are you sure you would like to delete this comment?');
+            });
+        });
+    </script>
+
+
 {% endblock %}
 
