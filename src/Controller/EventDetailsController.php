@@ -80,13 +80,6 @@ class EventDetailsController extends AbstractController
     public function eventDelete($eventID){
         $manager = $this->getDoctrine()->getManager();
         $event = $manager->getRepository(Event::class)->find($eventID);
-        $comments = $manager->getRepository(Comment::class)->findBy([
-            'event' => $eventID
-        ]);
-        foreach($comments as $comment){
-            $manager->remove($comment);
-            $manager->flush();
-        }
         if ($event != null){
             if($event->getPhoto()){
                 $fileSystem = new Filesystem();
