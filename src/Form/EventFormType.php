@@ -21,26 +21,20 @@ class EventFormType extends AbstractType
             ->add('title', null, [
                 'help' => 'Up to 60 characters long',
                 'attr' => ['autofocus' => null],
-                'data_class' => null
             ])
             ->add('intro', null, [
                 'help' => 'Up to 100 characters long',
-                'data_class' => null
             ])
             ->add('description', null, [
                 'help' => 'Minimum of 15 characters',
-                'data_class' => null
             ])
             ->add('date')
             ->add('location')
             ->add('category', EntityType::class, [
                 'class' => Category::class,
                 'choice_label' => 'name',
-                'data_class' => null
             ])
-            ->add('price', MoneyType::class, [
-                'data_class' => null
-            ])
+            ->add('price', MoneyType::class)
             ->add('photo', null, [
                 'label' => 'Event photo',
                 'help' => '200x200px to 900x900px size',
@@ -53,7 +47,6 @@ class EventFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Event::class,
-            'eventPhoto' => null
         ]);
     }
 }

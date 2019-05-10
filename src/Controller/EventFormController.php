@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-
 use App\Entity\Event;
 use App\Form\EventFormType;
 use Symfony\Component\Filesystem\Filesystem;
@@ -10,26 +9,37 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+
 class EventFormController extends AbstractController
 {
     /**
      * @Route("/admin/{action}/event/{eventID}", name="app_eventForm")
      */
-    public function createEvent(Request $request, $action, $eventID = null){
+    public function createEvent(Request $request, $action, $eventID = null)
+    {
         $entityManager = $this->getDoctrine()->getManager();
-        if($action === 'edit'){
+
+        if ($action === 'edit') {
             $event = $entityManager->getRepository(Event::class)->find($eventID);
-        }
-        else{
+            $oldPhoto = $event->getPhoto();
+        } else {
             $event = new Event();
+            $oldPhoto = null;
         }
+
         $form = $this->createForm(EventFormType::class, $event);
         $form->handleRequest($request);
 
-        if($form->isSubmitted()) {
+        if ($form->isSubmitted() && $form->isValid()) {
+            $fileSystem = new Filesystem();
+
             /** @var Symfony\Component\HttpFoundation\File\UploadedFile $file */
             $file = $form->get('photo')->getData();
             if ($file) {
+                if ($oldPhoto != null) {
+                    $fileSystem->remove($this->getParameter('photo_directory') . '/' . $oldPhoto);
+                }
+
                 $fileName = $this->generateUniqueFileName() . '.' . $file->guessExtension();
 
                 try {
@@ -40,32 +50,27 @@ class EventFormController extends AbstractController
                 } catch (FileException $e) {
                     // ... handle exception if something happens during file upload
                 }
-                if(!isset($_SESSION))
-                    session_start();
-                $_SESSION['eventPhoto'] = $fileName;
+                $event->setPhoto($fileName);
+            } elseif ($oldPhoto != null) {
+                $event->setPhoto($oldPhoto);
             }
-            if($form->isValid()) {
-                if (isset($_SESSION))
-                    $event->setPhoto($_SESSION['eventPhoto']);
 
-                if($request->request->get('eventPhoto'))
-                    $event->setPhoto($request->request->get('eventPhoto'));
-
-                if($request->request->get('deleteCheckBox') && $event->getPhoto()){
-                    $fileSystem = new Filesystem();
-                    $fileSystem->remove($this->getParameter('photo_directory').'/'.$event->getPhoto());
-                    $event->setPhoto(null);
-                }
-                $entityManager->persist($event);
-                $entityManager->flush();
-                return $this->redirectToRoute(($action === 'create') ? 'index' : 'app_eventDetails', array('eventID' => $eventID));
+            if ($request->request->get('deleteCheckBox') && $event->getPhoto()) {
+                $fileSystem->remove($this->getParameter('photo_directory') . '/' . $event->getPhoto());
+                $event->setPhoto(null);
             }
+
+            $entityManager->persist($event);
+            $entityManager->flush();
+            return $this->redirectToRoute(($action === 'create') ? 'index' : 'app_eventDetails',
+                array('eventID' => $eventID)
+            );
         }
 
         return $this->render('events/event_form.html.twig', [
             'eventForm' => $form->createView(),
-            'isNew' => ($action === 'create') ? true : false,
-            'photo' => $event->getPhoto()
+            'action' => ucfirst($action),
+            'photo' => $oldPhoto
         ]);
 
     }

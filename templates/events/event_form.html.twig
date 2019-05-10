@@ -1,20 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{% if isNew %}Create{% else %}Edit{% endif %} Event{% endblock %}
+{% block title %}{{ action }} Event{% endblock %}
 
 {% block body %}
-    <h1 class="text-center">{% if isNew %}Create{% else %}Edit{% endif %} Event</h1>
+    <h1 class="text-center">{{ action }} Event</h1>
 
     {{ form_start(eventForm) }}
     {{ form_widget(eventForm) }}
     {% if photo %}
-        <p>
-            <input type="checkbox" name="deleteCheckBox"> Delete Photo
-        </p>
-        <img src="{{ asset('uploads/photos/') ~ photo }}" class="img-fluid mb-4"><br>
+        <p><input type="checkbox" name="deleteCheckBox"> Delete Photo</p>
+        <img src="{{ asset('uploads/photos/') ~ photo }}" class="w-25 mb-4"><br>
     {% endif %}
-    <input type="hidden" name="eventPhoto" value={{ photo }}>
-    <button class="btn btn-primary">{% if isNew %}Create{% else %}Edit{% endif %} Event</button>
+    <button class="btn btn-primary">{{ action }} Event</button>
     {{ form_end(eventForm) }}
 
 
@@ -29,7 +26,5 @@
             bsCustomFileInput.init()
         })
     </script>
-
-
 
 {% endblock %}

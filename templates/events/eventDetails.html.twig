@@ -4,7 +4,7 @@
 <h1 class="text-center mb-5">{{ event.title }}
     {% if is_granted('ROLE_ADMIN') %}
         <a class="btn btn-danger float-right js-delete-btn" href="{{ path('app_deleteEvent', {'eventID':event.id}) }}">Delete Event</a>
-        <a class="btn btn-primary float-right"  href="{{ path('app_eventForm', {'action':'edit'}) }}/{{ event.id }}">Edit Event</a>&thinsp;
+        <a class="btn btn-primary float-right mr-1" href="{{ path('app_eventForm', {'action':'edit'}) }}/{{ event.id }}">Edit Event</a>
     {% endif %}
 </h1>
 
@@ -54,22 +54,18 @@
 {% block javascripts %}
     {{ parent() }}
 
-    <script>
-        $(document).ready(function() {
-            $('.js-delete-btn').on('click', function () {
-                return confirm('Are you sure you would like to delete this event?');
+    {% if is_granted('ROLE_ADMIN') %}
+        <script>
+            $(document).ready(function() {
+                $('.js-delete-btn').on('click', function () {
+                    return confirm('Are you sure you would like to delete this event?');
+                });
+                $('.js-delete-comm').on('click', function () {
+                    return confirm('Are you sure you would like to delete this comment?');
+                });
             });
-        });
-    </script>
-
-    <script>
-        $(document).ready(function() {
-            $('.js-delete-comm').on('click', function () {
-                return confirm('Are you sure you would like to delete this comment?');
-            });
-        });
-    </script>
-
+        </script>
+    {% endif %}
 
 {% endblock %}
 
