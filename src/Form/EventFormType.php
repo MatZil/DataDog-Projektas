@@ -16,29 +16,29 @@ class EventFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+
         $builder
             ->add('title', null, [
                 'help' => 'Up to 60 characters long',
-                'attr' => ['autofocus' => null]
+                'attr' => ['autofocus' => null],
             ])
             ->add('intro', null, [
-                'help' => 'Up to 100 characters long'
+                'help' => 'Up to 100 characters long',
             ])
             ->add('description', null, [
-                'help' => 'Minimum of 15 characters'
+                'help' => 'Minimum of 15 characters',
             ])
             ->add('date')
             ->add('location')
             ->add('category', EntityType::class, [
                 'class' => Category::class,
-                'choice_label' => 'name'
+                'choice_label' => 'name',
             ])
-            ->add('price', MoneyType::class, [
-                'data' => '0'
-            ])
+            ->add('price', MoneyType::class)
             ->add('photo', null, [
                 'label' => 'Event photo',
-                'help' => '200x200px to 900x900px size'
+                'help' => '200x200px to 900x900px size',
+                'data_class' => null
             ])
         ;
     }
