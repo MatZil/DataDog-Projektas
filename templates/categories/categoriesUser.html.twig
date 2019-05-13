@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Categories{% endblock %}
+
+{% block body %}
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">{{ message }}</div>
+    {% endfor %}
+    <h1>Categories:</h1>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th></th>
+        </tr>
+        </thead>
+
+        {% for category in categories %}
+
+            <tr>
+                <th>{{ category.id }}</th>
+                <td>{{ category.name }}</td>
+
+                {% if( category.name in app.user.subscribedCategories == false) %}
+                    <td><a class="btn btn-secondary btn-sm" role="button" id="subscribe" href="{{ path('app_categorySubscribeUser', { 'id': category.id }) }}">Subscribe</a></td>
+                {% else %}
+                    <td><a class="btn btn-secondary btn-sm " role="button" id="unsubscribe" href="{{ path('app_categoryUnsubscribeUser', { 'id': category.id }) }}">Unsubscribe</a></td>
+                {% endif %}
+
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+{% block zzz%}
+
+
+{% endblock %}
