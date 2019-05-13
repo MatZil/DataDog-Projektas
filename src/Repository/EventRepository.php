@@ -42,7 +42,7 @@ class EventRepository extends ServiceEntityRepository
             }
         }
 
-        return $qb->orderBy('e.date', 'ASC')->getQuery()->getResult();
+        return $qb->orderBy('e.date', 'ASC')->getQuery();
     }
 
     // /**
