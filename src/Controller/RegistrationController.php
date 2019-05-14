@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
+use App\Entity\SecurityCode;
 
 class RegistrationController extends AbstractController
 {
@@ -18,7 +19,7 @@ class RegistrationController extends AbstractController
     /**
      * @Route("/register", name="app_register")
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder,GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $formAuthenticator, \Swift_Mailer $mailer): Response
+    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $formAuthenticator, \Swift_Mailer $mailer): Response
     {
         if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             return $this->redirectToRoute("index");
@@ -27,6 +28,7 @@ class RegistrationController extends AbstractController
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
             $user->setPassword(
@@ -37,19 +39,26 @@ class RegistrationController extends AbstractController
             );
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
-            $entityManager->flush();
-            // do anything else you need here, like send an email
-            $message = (new \Swift_Message('My Subject'))
+
+            $secCode = new SecurityCode();
+            $secCode->setSecureCode();
+            $secCode->setPurpose(SecurityCode::EMAIL_CONFIRMATION);
+            $secCode->setUser($user);
+
+            $message = (new \Swift_Message('Email Confirmation'))
                 ->setFrom(['datasuniai@gmail.com' => 'Datašuniai'])
                 ->setTo($user->getEmail())
                 ->setBody(
                     $this->renderView('registration/confirmation.html.twig', [
-                        'username' => $user->getUsername()
+                        'username' => $user->getUsername(),
+                        'code' => $secCode->getCode()
                     ]),
                     'text/html'
                 );
             $mailer->send($message);
-            //$this->CreateEvent($user->getUsername()); //This creates the event that deletes the user after 1 week. Commented out for testing convenience, if you decide to uncomment it make sure you enable confirmation e-mails in config/packages/swiftmailer.yaml
+
+            $entityManager->persist($secCode);
+            $entityManager->flush();
 
             return $guardHandler->authenticateUserAndHandleSuccess(
                 $user,
@@ -58,21 +67,34 @@ class RegistrationController extends AbstractController
                 'main'
             );
         }
+
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
     }
 
-    private function CreateEvent($username){
-        $em = $this->getDoctrine()->getManager();
+    /**
+     * @Route("/confirmed/{code}", name="app_confirmed")
+     */
+    public function confirmed($code = ""): Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $secCode = $entityManager->getRepository(SecurityCode::class)->findOneBy([
+            'purpose' => SecurityCode::EMAIL_CONFIRMATION,
+            'code' => $code
+        ]);
 
-        $RAW_QUERY = "CREATE EVENT {$username}_DELETE
-                      ON SCHEDULE AT CURRENT_TIMESTAMP + INTERVAL 1 WEEK
-                      DO
-                         DELETE FROM user
-                         WHERE username = '{$username}';";
+        $user = null;
 
-        $statement = $em->getConnection()->prepare($RAW_QUERY);
-        $statement->execute();
+        if ($secCode != null) {
+            $user = $secCode->getUser();
+            $user->setIsActivated(true);
+            $entityManager->remove($secCode);
+            $entityManager->flush();
+        }
+
+        return $this->render('registration/confirmed.html.twig', [
+            'user' => $user
+        ]);
     }
 }

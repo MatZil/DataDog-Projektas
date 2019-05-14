@@ -1,12 +1,11 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<div>
-    <p>
-        Congratulations, {{ username }}! Your e-mail has just been verified.
-    </p>
-    <p>
-        <a href="{{ path('index') }}">Go to homepage</a>
-    </p>
+<div class="text-center">
+    {% if user %}
+        <h5>Congratulations, {{ user.username }}! Your email has just been verified.</h5>
+    {% else %}
+        <h5>Sorry, this email confirmation link is expired or does not exist</h5>
+    {% endif %}
 </div>
 {% endblock %}
