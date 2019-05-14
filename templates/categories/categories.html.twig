@@ -16,12 +16,24 @@
             <th></th>
         </tr>
         </thead>
+
         {% for category in categories %}
+
             <tr>
                 <th>{{ category.id }}</th>
                 <td>{{ category.name }}</td>
+                
                 <td class="text-right"><a class="btn btn-secondary btn-sm" href="{{ path('app_categoryEdit', { 'id': category.id }) }}">Edit</a>
+
+                   {% if( category.name in app.user.subscribedCategories == false) %}
+                 <a class="btn btn-secondary btn-sm" role="button" id="subscribe" href="{{ path('app_categorySubscribe', { 'id': category.id }) }}">Subscribe</a>
+                    {% else %}
+                    <a class="btn btn-secondary btn-sm" role="button" id="unsubscribe" href="{{ path('app_categoryUnsubscribe', { 'id': category.id }) }}">Unsubscribe</a>
+                    {% endif %}
                 <a class="btn btn-danger btn-sm js-delete-btn" href="{{ path('app_categoryDelete', { 'id': category.id }) }}">Delete</a></td>
+
+
+
             </tr>
         {% endfor %}
     </table>
@@ -40,3 +52,4 @@
     </script>
 
 {% endblock %}
+
