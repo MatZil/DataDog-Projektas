@@ -8,6 +8,7 @@ use App\Entity\Category;
 use App\Entity\Event;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -28,7 +29,10 @@ class EventFormType extends AbstractType
             ->add('description', null, [
                 'help' => 'Minimum of 15 characters',
             ])
-            ->add('date')
+            ->add('date', DateTimeType::class, [
+                'years' => range(date('Y'), date('Y')+10),
+                'label' => 'Date and time'
+            ])
             ->add('location')
             ->add('category', EntityType::class, [
                 'class' => Category::class,
