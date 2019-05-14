@@ -104,6 +104,14 @@ class User implements UserInterface
      */
     private $comments;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $subscribedCategories;
+
+
+
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -261,4 +269,29 @@ class User implements UserInterface
 
         return $this;
     }
+
+
+    public function getSubscribedCategories(): ?string
+    {
+        return $this->subscribedCategories;
+    }
+
+    public function replaceSubscribedCategories(?string $old,$new): self
+    {
+        $this->subscribedCategories = str_replace($old ,$new, $this->subscribedCategories);
+
+        return $this;
+    }
+    public function setSubscribedCategories(?string $new): self
+    {
+        $this->subscribedCategories = $new;
+
+        return $this;
+    }
+    public function unsubscribeCategory(?string $old): self
+    {
+        $this->subscribedCategories = str_replace($old . ',',null, $this->subscribedCategories);
+        return $this;
+    }
+
 }
