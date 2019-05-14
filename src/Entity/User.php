@@ -107,12 +107,12 @@ class User implements UserInterface
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Category", inversedBy="users")
      */
-    private $SubscribedCategories;
+    private $subscribedCategories;
 
     public function __construct()
     {
         $this->comments = new ArrayCollection();
-        $this->SubscribedCategories = new ArrayCollection();
+        $this->subscribedCategories = new ArrayCollection();
     }
 
 
@@ -267,10 +267,19 @@ class User implements UserInterface
 
         return $this;
     }
+
+    /**
+     * @return Collection|Category[]
+     */
+    public function getSubscribedCategories(): Collection
+    {
+        return $this->subscribedCategories;
+    }
+
     public function addSubscribedCategory(Category $subscribedCategory): self
     {
-        if (!$this->SubscribedCategories->contains($subscribedCategory)) {
-            $this->SubscribedCategories[] = $subscribedCategory;
+        if (!$this->subscribedCategories->contains($subscribedCategory)) {
+            $this->subscribedCategories[] = $subscribedCategory;
         }
 
         return $this;
@@ -278,22 +287,11 @@ class User implements UserInterface
 
     public function removeSubscribedCategory(Category $subscribedCategory): self
     {
-        if ($this->SubscribedCategories->contains($subscribedCategory)) {
-            $this->SubscribedCategories->removeElement($subscribedCategory);
+        if ($this->subscribedCategories->contains($subscribedCategory)) {
+            $this->subscribedCategories->removeElement($subscribedCategory);
         }
 
         return $this;
-    }
-    public function getSubscribedCategories(): Collection
-    {
-        return $this->SubscribedCategories;
-    }
-    public function containsCategoryInSubscribedCategories(Category $Category)
-    {
-        if($this->SubscribedCategories->contains($Category)) {
-            return true;
-        }
-        return false;
     }
 
 }

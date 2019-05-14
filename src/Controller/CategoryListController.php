@@ -4,12 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Category;
 use App\Entity\Event;
-use App\Entity\User;
 use App\Form\CategoryFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Validator\Constraints\Length;
 
 class CategoryListController extends AbstractController
 {
@@ -20,7 +18,7 @@ class CategoryListController extends AbstractController
     public function categories()
     {
         $categories = $this->getDoctrine()->getRepository(Category::class)->findAll();
-        $user = $this->getUser();
+
         return $this->render('categories/categories.html.twig', array(
             'categories' => $categories));
     }
@@ -30,16 +28,12 @@ class CategoryListController extends AbstractController
      */
     public function categoryDelete($id)
     {
-        $user = $this->getUser();
         $manager = $this->getDoctrine()->getManager();
         $category = $manager->getRepository(Category::class)->find($id);
-        $categoryName = $manager->getRepository(Category::class)->find($id)->getName();
         $event = $manager->getRepository(Event::class)->findOneBy(['category' => $category->getId()]);
 
         if ($category != null && !$event)
         {
-            $user->unsubscribeCategory($categoryName);
-            $manager->persist($user);
             $manager->remove($category);
             $manager->flush();
         }
@@ -78,15 +72,13 @@ class CategoryListController extends AbstractController
      */
     public function categoryEdit(Request $request, $id)
     {
-        $user = $this->getUser();
         $manager = $this->getDoctrine()->getManager();
         $category = $manager->getRepository(Category::class)->find($id);
+
         $form = $this->createForm(CategoryFormType::class, $category);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            $manager->persist($user);
             $manager->flush();
 
             return $this->redirectToRoute('app_categoryList');

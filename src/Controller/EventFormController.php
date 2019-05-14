@@ -28,7 +28,7 @@ class EventFormController extends AbstractController
             $event = new Event();
             $oldPhoto = null;
         }
-        $users = $entityManager->getRepository(User::class)->findAll();
+
         $form = $this->createForm(EventFormType::class, $event);
         $form->handleRequest($request);
 
@@ -62,24 +62,22 @@ class EventFormController extends AbstractController
                 $event->setPhoto(null);
             }
 
-
             $entityManager->persist($event);
             $entityManager->flush();
-            $category = $form->get('category')->getData();
+
+            $users = $event->getCategory()->getUsers();
+
             foreach ($users as $user) {
-                $sub = $entityManager->getRepository(User::class)->find($user)->containsCategoryInSubscribedCategories($category);
-                if ($sub == true) {
-                    $message = (new \Swift_Message('New event has been added with your subscribed category'))
-                        ->setFrom(['datasuniai@gmail.com' => 'Datašuniai'])
-                        ->setTo($entityManager->getRepository(User::class)->find($user)->getEmail())
-                        ->setBody(
-                            $this->renderView('events/NewEventEmailForm.html.twig', [
-                                'event' => $event
-                            ]),
-                            'text/html'
-                        );
-                    $mailer->send($message);
-                }
+                $message = (new \Swift_Message('New event has been added with your subscribed category'))
+                    ->setFrom(['datasuniai@gmail.com' => 'Datašuniai'])
+                    ->setTo($user->getEmail())
+                    ->setBody(
+                        $this->renderView('events/NewEventEmailForm.html.twig', [
+                            'event' => $event
+                        ]),
+                        'text/html'
+                    );
+                $mailer->send($message);
             }
 
             return $this->redirectToRoute(($action === 'create') ? 'index' : 'app_eventDetails',

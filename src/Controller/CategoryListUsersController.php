@@ -7,14 +7,10 @@
  */
 
 namespace App\Controller;
+
 use App\Entity\Category;
-use App\Entity\Event;
-use App\Entity\User;
-use App\Form\CategoryFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Validator\Constraints\Length;
 
 class CategoryListUsersController extends AbstractController
 {
@@ -36,19 +32,8 @@ class CategoryListUsersController extends AbstractController
 
         $user = $this->getUser();
         $manager = $this->getDoctrine()->getManager();
-        $category = $manager->getRepository(Category::class)->find($id)->getName();
-        $oldCategories=$user->getSubscribedCategories();
-        if($oldCategories == null)
-        {
-            $newCategories=$category . ',';
-        }
-        else{
-            $newCategories=$oldCategories . $category . ',';
-        }
-
-        if(strpos($oldCategories,$category) === false) {
-            $user->setSubscribedCategories($newCategories);
-        }
+        $category = $manager->getRepository(Category::class)->find($id);
+        $user->addSubscribedCategory($category);
         $manager->persist($user);
         $manager->flush();
 
@@ -62,9 +47,8 @@ class CategoryListUsersController extends AbstractController
     {
         $user = $this->getUser();
         $manager = $this->getDoctrine()->getManager();
-        $category = $manager->getRepository(Category::class)->find($id)->getName();
-        $user->unsubscribeCategory($category);
-
+        $category = $manager->getRepository(Category::class)->find($id);
+        $user->removeSubscribedCategory($category);
         $manager->persist($user);
         $manager->flush();
 
