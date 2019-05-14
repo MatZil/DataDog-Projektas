@@ -271,5 +271,12 @@ class User implements UserInterface
     {
         return $this->SubscribedCategories;
     }
+    public function containsCategoryInSubscribedCategories(Category $Category)
+    {
+        if($this->SubscribedCategories->contains($Category)) {
+            return true;
+        }
+        return false;
+    }
 
 }

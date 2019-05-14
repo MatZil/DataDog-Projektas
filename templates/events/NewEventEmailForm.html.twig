@@ -1,0 +1,18 @@
+{% block body %}
+<h1 class="text-center mb-5">{{ event.title }}
+</h1>
+<div class="row">
+    <div class="col-7">
+        <p>Category: {{ event.category }}</p>
+        <p>Date and time: {{ event.date | date("Y-m-d H:i") }}</p>
+        <p>Location: {{ event.location }}</p>
+        <p>Price: {{ event.price == 0 ? 'FREE' : (event.price | number_format(2) ~ ' &euro;') | raw}}</p>
+        <p>Description: {{ event.description }}</p>
+    </div>
+    <div class="col-5">
+        {% if event.photo %}
+            <img src="{{ asset('uploads/photos/') ~ event.photo }}" class="img-fluid mb-4">
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+
 use App\Entity\Event;
+use App\Entity\User;
 use App\Form\EventFormType;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,7 +17,7 @@ class EventFormController extends AbstractController
     /**
      * @Route("/admin/{action}/event/{eventID}", name="app_eventForm")
      */
-    public function createEvent(Request $request, $action, $eventID = null)
+    public function createEvent(Request $request, $action, $eventID = null, \Swift_Mailer $mailer)
     {
         $entityManager = $this->getDoctrine()->getManager();
 
@@ -26,7 +28,7 @@ class EventFormController extends AbstractController
             $event = new Event();
             $oldPhoto = null;
         }
-
+        $users = $entityManager->getRepository(User::class)->findAll();
         $form = $this->createForm(EventFormType::class, $event);
         $form->handleRequest($request);
 
@@ -60,8 +62,26 @@ class EventFormController extends AbstractController
                 $event->setPhoto(null);
             }
 
+
             $entityManager->persist($event);
             $entityManager->flush();
+            $category = $form->get('category')->getData();
+            foreach ($users as $user) {
+                $sub = $entityManager->getRepository(User::class)->find($user)->containsCategoryInSubscribedCategories($category);
+                if ($sub == true) {
+                    $message = (new \Swift_Message('Naujas Eventas pagal jūsų užsiprenumeruota kategorija'))
+                        ->setFrom(['datasuniai@gmail.com' => 'Datašuniai'])
+                        ->setTo($entityManager->getRepository(User::class)->find($user)->getEmail())
+                        ->setBody(
+                            $this->renderView('events/NewEventEmailForm.html.twig', [
+                                'event' => $event
+                            ]),
+                            'text/html'
+                        );
+                    $mailer->send($message);
+                }
+            }
+
             return $this->redirectToRoute(($action === 'create') ? 'index' : 'app_eventDetails',
                 array('eventID' => $eventID)
             );
