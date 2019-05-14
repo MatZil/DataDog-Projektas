@@ -34,6 +34,7 @@
                         <i class="material-icons-outlined mr-1">account_circle</i>
                         <span>{{ app.user.firstName }}</span>
                     </a>
+                    <div class="dropdown-menu dropdown-menu-right mt-3 mr--1">
                         {% if is_granted('ROLE_ADMIN') %}
                             <a class="dropdown-item d-flex" href="{{ path('app_eventForm', { 'action': 'create' }) }}">
                                 <span class="mr-auto">New Event</span>
