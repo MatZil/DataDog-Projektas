@@ -69,7 +69,7 @@ class EventFormController extends AbstractController
             foreach ($users as $user) {
                 $sub = $entityManager->getRepository(User::class)->find($user)->containsCategoryInSubscribedCategories($category);
                 if ($sub == true) {
-                    $message = (new \Swift_Message('Naujas Eventas pagal jūsų užsiprenumeruota kategorija'))
+                    $message = (new \Swift_Message('New event has been added with your subscribed category'))
                         ->setFrom(['datasuniai@gmail.com' => 'Datašuniai'])
                         ->setTo($entityManager->getRepository(User::class)->find($user)->getEmail())
                         ->setBody(
