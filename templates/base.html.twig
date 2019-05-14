@@ -40,6 +40,8 @@
                             <span class="mr-auto">Profile</span>
                             <i class="material-icons-outlined ml-2">account_box</i>
                         </a>
+
+
                         {% if is_granted('ROLE_ADMIN') %}
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item d-flex" href="{{ path('app_eventForm', { 'action': 'create' }) }}">
@@ -55,6 +57,11 @@
                                 <i class="material-icons-outlined ml-2">view_list</i>
                             </a>
                             <div class="dropdown-divider"></div>
+                            {% else %}
+                                <a class="dropdown-item d-flex" href="{{ path('app_categoryListUser') }}">
+                                    <span class="mr-auto">Event categories</span>
+                                    <i class="material-icons-outlined ml-2">view_list</i>
+                                </a>
                         {% endif %}
                         <a class="dropdown-item d-flex" href="{{ path('app_changePassword') }}">
                             <span class="mr-auto">Settings</span>
