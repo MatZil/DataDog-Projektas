@@ -97,9 +97,11 @@ class CategoryListController extends AbstractController
         $user = $this->getUser();
         $manager = $this->getDoctrine()->getManager();
         $category = $manager->getRepository(Category::class)->find($id);
-        $user->addSubscribedCategory($category);
-        $manager->persist($user);
-        $manager->flush();
+        if ($user != null && $category != null) {
+            $user->addSubscribedCategory($category);
+            $manager->persist($user);
+            $manager->flush();
+        }
 
         return $this->redirectToRoute("app_categoryList");
 
@@ -112,10 +114,11 @@ class CategoryListController extends AbstractController
         $user = $this->getUser();
         $manager = $this->getDoctrine()->getManager();
         $category = $manager->getRepository(Category::class)->find($id);
-        $user->removeSubscribedCategory($category);
-        $manager->persist($user);
-        $manager->flush();
-
+        if ($user != null && $category != null) {
+            $user->removeSubscribedCategory($category);
+            $manager->persist($user);
+            $manager->flush();
+        }
 
         return $this->redirectToRoute("app_categoryList");
 

@@ -19,6 +19,8 @@ class CategoryListUsersController extends AbstractController
      */
     public function categories()
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+
         $categories = $this->getDoctrine()->getRepository(Category::class)->findAll();
 
         return $this->render('categories/categoriesUser.html.twig', array(
@@ -33,9 +35,11 @@ class CategoryListUsersController extends AbstractController
         $user = $this->getUser();
         $manager = $this->getDoctrine()->getManager();
         $category = $manager->getRepository(Category::class)->find($id);
-        $user->addSubscribedCategory($category);
-        $manager->persist($user);
-        $manager->flush();
+        if ($user != null && $category != null) {
+            $user->addSubscribedCategory($category);
+            $manager->persist($user);
+            $manager->flush();
+        }
 
         return $this->redirectToRoute("app_categoryListUser");
 
@@ -48,9 +52,11 @@ class CategoryListUsersController extends AbstractController
         $user = $this->getUser();
         $manager = $this->getDoctrine()->getManager();
         $category = $manager->getRepository(Category::class)->find($id);
-        $user->removeSubscribedCategory($category);
-        $manager->persist($user);
-        $manager->flush();
+        if ($user != null && $category != null) {
+            $user->removeSubscribedCategory($category);
+            $manager->persist($user);
+            $manager->flush();
+        }
 
 
         return $this->redirectToRoute("app_categoryListUser");
