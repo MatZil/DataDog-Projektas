@@ -100,16 +100,14 @@ class User implements UserInterface
     private $comments;
 
     /**
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\ManyToMany(targetEntity="App\Entity\Category", inversedBy="users")
      */
-    private $subscribedCategories;
-
-
-
+    private $SubscribedCategories;
 
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->SubscribedCategories = new ArrayCollection();
     }
 
 
@@ -252,29 +250,26 @@ class User implements UserInterface
 
         return $this;
     }
-
-
-    public function getSubscribedCategories(): ?string
+    public function addSubscribedCategory(Category $subscribedCategory): self
     {
-        return $this->subscribedCategories;
-    }
-
-    public function replaceSubscribedCategories(?string $old,$new): self
-    {
-        $this->subscribedCategories = str_replace($old ,$new, $this->subscribedCategories);
+        if (!$this->SubscribedCategories->contains($subscribedCategory)) {
+            $this->SubscribedCategories[] = $subscribedCategory;
+        }
 
         return $this;
     }
-    public function setSubscribedCategories(?string $new): self
+
+    public function removeSubscribedCategory(Category $subscribedCategory): self
     {
-        $this->subscribedCategories = $new;
+        if ($this->SubscribedCategories->contains($subscribedCategory)) {
+            $this->SubscribedCategories->removeElement($subscribedCategory);
+        }
 
         return $this;
     }
-    public function unsubscribeCategory(?string $old): self
+    public function getSubscribedCategories(): Collection
     {
-        $this->subscribedCategories = str_replace($old . ',',null, $this->subscribedCategories);
-        return $this;
+        return $this->SubscribedCategories;
     }
 
 }

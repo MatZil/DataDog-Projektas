@@ -81,14 +81,10 @@ class CategoryListController extends AbstractController
         $user = $this->getUser();
         $manager = $this->getDoctrine()->getManager();
         $category = $manager->getRepository(Category::class)->find($id);
-        $oldcategoryname = $manager->getRepository(Category::class)->find($id)->getName();
         $form = $this->createForm(CategoryFormType::class, $category);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            $newcategoryName=$form->get('name')->getData();
-            $user->replaceSubscribedCategories($oldcategoryname,$newcategoryName);
 
             $manager->persist($user);
             $manager->flush();
@@ -108,21 +104,8 @@ class CategoryListController extends AbstractController
 
         $user = $this->getUser();
         $manager = $this->getDoctrine()->getManager();
-        $category = $manager->getRepository(Category::class)->find($id)->getName();
-        $oldCategories=$user->getSubscribedCategories();
-        if($oldCategories == null)
-        {
-            $newCategories=$category . ',';
-        }
-        else{
-            $newCategories=$oldCategories . $category . ',';
-        }
-
-        if(strpos($oldCategories,$category) === false) {
-            $user->setSubscribedCategories($newCategories);
-
-        }
-
+        $category = $manager->getRepository(Category::class)->find($id);
+        $user->addSubscribedCategory($category);
         $manager->persist($user);
         $manager->flush();
 
@@ -136,9 +119,8 @@ class CategoryListController extends AbstractController
     {
         $user = $this->getUser();
         $manager = $this->getDoctrine()->getManager();
-        $category = $manager->getRepository(Category::class)->find($id)->getName();
-        $user->unsubscribeCategory($category);
-
+        $category = $manager->getRepository(Category::class)->find($id);
+        $user->removeSubscribedCategory($category);
         $manager->persist($user);
         $manager->flush();
 
