@@ -70,3 +70,12 @@ label.required::before {
     height: 320px;
     border: 0;
 }
+
+.navigation > nav {
+    display: flex!important;
+}
+
+.pagination {
+    margin-left: auto!important;
+    margin-right: auto!important;
+}

@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-
+use App\Entity\SecurityCode;
 
 class SecurityController extends AbstractController
 {
@@ -33,7 +33,8 @@ class SecurityController extends AbstractController
 
         return $this->render('security/login.html.twig', [
             'last_username' => $lastUsername,
-            'error' => $error]);
+            'error' => $error
+        ]);
     }
 
 
@@ -47,7 +48,7 @@ class SecurityController extends AbstractController
     /**
      * @Route ("/reset", name="app_reset")
      */
-    public function resetPassword_GetEmail(Request $request, \Swift_Mailer $mailer)
+    public function resetPasswordGetEmail(Request $request, \Swift_Mailer $mailer)
     {
         $form = $this->createForm(EmailFormType::class);
         $form->handleRequest($request);
@@ -57,20 +58,28 @@ class SecurityController extends AbstractController
 
             $entityManager = $this->getDoctrine()->getManager();
             $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
+
             if ($user != null) {
+                $secCode = new SecurityCode();
+                $secCode->setSecureCode();
+                $secCode->setPurpose(SecurityCode::PASSWORD_RESET);
+                $secCode->setUser($user);
 
-                $this->addFlash('success', 'link has been sent to this email: ' . $email);
-
-                $message = (new \Swift_Message('Reset password email'))
-                    ->setFrom('Datasuniai@datasuniai.com')
+                $message = (new \Swift_Message('Password Reset'))
+                    ->setFrom(['datasuniai@gmail.com' => 'Datašuniai'])
                     ->setTo($email)
                     ->setBody(
-                        $this->renderView(
-                            'security/reset_password.html.twig',
-                            ['id' => $user->getId()]),
+                        $this->renderView('security/reset_password.html.twig', [
+                            'username' => $user->getUsername(),
+                            'code' => $secCode->getCode()
+                        ]),
                         'text/html'
                     );
                 $mailer->send($message);
+                $this->addFlash('success', 'link has been sent to this email: ' . $email);
+
+                $entityManager->persist($secCode);
+                $entityManager->flush();
             } else {
                 $emailError = new FormError("There is no such email registered");
                 $form->get('email')->addError($emailError);
@@ -83,35 +92,45 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route ("/reset/{id}", name="app_changePsw")
+     * @Route ("/reset/{code}", name="app_changePsw")
      */
-    public function resetPasswordChangePassword(Request $request, $id = "", UserPasswordEncoderInterface $passwordEncoder)
+    public function resetPasswordChangePassword(Request $request, $code = "", UserPasswordEncoderInterface $passwordEncoder)
     {
+        $entityManager = $this->getDoctrine()->getManager();
+        $secCode = $entityManager->getRepository(SecurityCode::class)->findOneBy([
+            'purpose' => SecurityCode::PASSWORD_RESET,
+            'code' => $code
+        ]);
+
+        $user = null;
 
         $form = $this->createForm(Reset_PasswordFormType::class);
         $form->handleRequest($request);
 
-        $user = $this->getDoctrine()->getRepository(User::class)->find($id);
+        if ($secCode != null) {
+            $user = $secCode->getUser();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $user->setPassword(
-                $passwordEncoder->encodePassword(
-                    $user,
-                    $form->get('newPassword')->getData()
+            if ($form->isSubmitted() && $form->isValid()) {
+                $user->setPassword(
+                    $passwordEncoder->encodePassword(
+                        $user,
+                        $form->get('newPassword')->getData()
+                    )
+                );
+                $entityManager->persist($user);
+                $entityManager->remove($secCode);
+                $entityManager->flush();
 
-                )
-            );
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('index');
+                return $this->redirectToRoute('index');
+            }
         }
 
         return $this->render('security/change_passwordByReset.html.twig', [
             'changepassform' => $form->createView(),
+            'user' => $user
         ]);
     }
+
     /**
      * @Route ("/change", name="app_changePassword")
      */
@@ -124,11 +143,11 @@ class SecurityController extends AbstractController
         $user = $this->getUser();
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($passwordEncoder->isPasswordValid($user, $form->get('CurrentPassword')->getData()))
-            {
+            if ($passwordEncoder->isPasswordValid($user, $form->get('CurrentPassword')->getData())) {
                 $user->setPassword(
                     $passwordEncoder->encodePassword(
-                        $user, $form->get('NewPassword')->getData()
+                        $user,
+                        $form->get('NewPassword')->getData()
                     )
                 );
                 $entityManager = $this->getDoctrine()->getManager();
@@ -136,9 +155,7 @@ class SecurityController extends AbstractController
                 $entityManager->flush();
 
                 return $this->redirectToRoute('index');
-            }
-            else
-            {
+            } else {
                 $this->addFlash('error', 'Current password is incorrect!');
             }
         }
@@ -147,6 +164,5 @@ class SecurityController extends AbstractController
         return $this->render('security/change_password.html.twig', [
             'changepass' => $form->createView(),
         ]);
-
     }
 }

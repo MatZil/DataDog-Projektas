@@ -95,6 +95,11 @@ class User implements UserInterface
     private $firstName;
 
     /**
+     * @ORM\Column(type="boolean", options={"default" : false})
+     */
+    private $isActivated = false;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="user")
      */
     private $comments;
@@ -216,6 +221,18 @@ class User implements UserInterface
     public function setFirstName(string $firstName): self
     {
         $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    public function getIsActivated(): ?bool
+    {
+        return $this->isActivated;
+    }
+
+    public function setIsActivated(bool $isActivated): self
+    {
+        $this->isActivated = $isActivated;
 
         return $this;
     }

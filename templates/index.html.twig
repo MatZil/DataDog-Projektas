@@ -48,7 +48,7 @@
         </div>
     </div>
 
-    {% for event in events %}
+    {% for event in pagination %}
         <div class="card card-event mb-5 mx-auto">
             <a href="{{ path('app_eventDetails', {'eventID':event.id}) }}" class="stretched-link"></a>
             <div class="row no-gutters">
@@ -80,13 +80,17 @@
             </div>
         </div>
     {% endfor %}
-    {% if not events %}
+    {% if not pagination.items %}
         <div class="card card-event mx-auto">
             <div class="card-body">
                 <p class="card-text text-center lead">No Events Were Found</p>
             </div>
         </div>
     {% endif %}
+
+    <div class="navigation">
+        {{ knp_pagination_render(pagination) }}
+    </div>
 {% endblock %}
 
 {% block javascripts %}
