@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -19,12 +20,16 @@ class RegistrationFormType extends AbstractType
                 'attr' => ['autofocus' => null]
             ])
             ->add('username')
-            ->add('plainPassword', PasswordType::class, [
-                'label' => 'Password',
+            ->add('plainPassword', RepeatedType::class, [
+                'type' => PasswordType::class,
+                'first_options'  => array('label' => 'Password'),
+                'second_options' => array('label' => 'Repeat Password'),
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
                 'mapped' => false,
                 'help' => 'At least 6 characters long',
+                'required' => true,
+                'invalid_message' => 'The password fields must match.',
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Please enter a password',
