@@ -1,3 +1,4 @@
+{% extends 'email_base.html.twig' %}
 {% block body %}
 <h1 class="text-center mb-5">{{ event.title }}
 </h1>
@@ -8,6 +9,7 @@
         <p>Location: {{ event.location }}</p>
         <p>Price: {{ event.price == 0 ? 'FREE' : (event.price | number_format(2) ~ ' &euro;') | raw}}</p>
         <p>Description: {{ event.description }}</p>
+        <a href="http://localhost:8000/events/{{event.id}}">Link to the event</a>
     </div>
     <div class="col-5">
         {% if event.photo %}
