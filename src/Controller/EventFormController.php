@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+
 use App\Entity\Event;
+use App\Entity\User;
 use App\Form\EventFormType;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,7 +17,7 @@ class EventFormController extends AbstractController
     /**
      * @Route("/admin/{action}/event/{eventID}", name="app_eventForm")
      */
-    public function createEvent(Request $request, $action, $eventID = null)
+    public function createEvent(Request $request, $action, $eventID = null, \Swift_Mailer $mailer)
     {
         $entityManager = $this->getDoctrine()->getManager();
 
@@ -62,6 +64,22 @@ class EventFormController extends AbstractController
 
             $entityManager->persist($event);
             $entityManager->flush();
+
+            $users = $event->getCategory()->getUsers();
+
+            foreach ($users as $user) {
+                $message = (new \Swift_Message('New event has been added with your subscribed category'))
+                    ->setFrom(['datasuniai@gmail.com' => 'Datašuniai'])
+                    ->setTo($user->getEmail())
+                    ->setBody(
+                        $this->renderView('events/NewEventEmailForm.html.twig', [
+                            'event' => $event
+                        ]),
+                        'text/html'
+                    );
+                $mailer->send($message);
+            }
+
             return $this->redirectToRoute(($action === 'create') ? 'index' : 'app_eventDetails',
                 array('eventID' => $eventID)
             );
