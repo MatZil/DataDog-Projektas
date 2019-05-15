@@ -13,7 +13,7 @@ class CategoryListController extends AbstractController
 {
 
     /**
-     * @Route("/admin/categories", name="app_categoryList")
+     * @Route("/categories", name="app_categoryList")
      */
     public function categories()
     {
@@ -63,7 +63,7 @@ class CategoryListController extends AbstractController
         }
 
         return $this->render('categories/category_form.html.twig', [
-            'addcategoryform' => $form->createView(),
+            'addcategoryform' => $form->createView()
         ]);
     }
 
@@ -85,11 +85,11 @@ class CategoryListController extends AbstractController
         }
 
         return $this->render('categories/category_form.html.twig', [
-            'addcategoryform' => $form->createView(),
+            'addcategoryform' => $form->createView()
         ]);
     }
     /**
-     * @Route("/admin/categories/subscribe/{id}", name="app_categorySubscribe")
+     * @Route("/categories/subscribe/{id}", name="app_categorySubscribe")
      */
     public function subscribeCategory($id)
     {
@@ -104,10 +104,9 @@ class CategoryListController extends AbstractController
         }
 
         return $this->redirectToRoute("app_categoryList");
-
     }
     /**
-     * @Route("/admin/categories/unsubscribe/{id}", name="app_categoryUnsubscribe")
+     * @Route("/categories/unsubscribe/{id}", name="app_categoryUnsubscribe")
      */
     public function unsubscribeCategory($id)
     {
@@ -121,6 +120,5 @@ class CategoryListController extends AbstractController
         }
 
         return $this->redirectToRoute("app_categoryList");
-
     }
 }
