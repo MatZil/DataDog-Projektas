@@ -1,24 +1,39 @@
 {% extends 'base.html.twig' %}
 {% block title %}{{ event.title }}{% endblock %}
 {% block body %}
-<h1 class="text-center mb-5">{{ event.title }}
+<div class="d-flex align-items-center mb-4">
+    <h1 class="display-4 text-break text-center flex-grow-1 pb-3">{{ event.title }}</h1>
     {% if is_granted('ROLE_ADMIN') %}
-        <a class="btn btn-danger float-right js-delete-btn" href="{{ path('app_deleteEvent', {'eventID':event.id}) }}">Delete Event</a>
-        <a class="btn btn-primary float-right mr-1" href="{{ path('app_eventForm', {'action':'edit'}) }}/{{ event.id }}">Edit Event</a>
+    <div class="text-right">
+        <a class="btn btn-primary mb-1 mb-md-0" href="{{ path('app_eventForm', {'action':'edit'}) }}/{{ event.id }}">Edit Event</a>
+        <a class="btn btn-danger js-delete-btn" href="{{ path('app_deleteEvent', {'eventID':event.id}) }}">Delete Event</a>
+    </div>
     {% endif %}
-</h1>
+</div>
 
-<div class="row">
-    <div class="col-7">
-        <p>Category: {{ event.category }}</p>
-        <p>Date and time: {{ event.date | date("Y-m-d H:i") }}</p>
-        <p>Location: {{ event.location }}</p>
-        <p>Price: {{ event.price == 0 ? 'FREE' : (event.price | number_format(2) ~ ' &euro;') | raw}}</p>
+<div class="row mb-4">
+    <div class="col-md-7">
+        <div class="d-flex">
+            <i class="material-icons-outlined mr-1">category</i>
+            <p> Category: <a href="{{ path('app_categoryList') }}">{{ event.category }}</a></p>
+        </div>
+        <div class="d-flex">
+            <i class="material-icons-outlined mr-1">access_time</i>
+            <p>Date and time: {{ event.date | date("Y-m-d H:i") }}</p>
+        </div>
+        <div class="d-flex">
+            <i class="material-icons-outlined mr-1">my_location</i>
+            <p>Location: {{ event.location }}</p>
+        </div>
+        <div class="d-flex">
+            <i class="material-icons-outlined mr-1">monetization_on</i>
+            <p>Price: {{ event.price == 0 ? 'FREE' : (event.price | number_format(2) ~ ' &euro;') | raw}}</p>
+        </div>
         <p class="text-break">{{ event.description }}</p>
     </div>
-    <div class="col-5">
+    <div class="col-md-5">
         {% if event.photo %}
-            <img src="{{ asset('uploads/photos/') ~ event.photo }}" class="img-fluid mb-4">
+            <img src="{{ asset('uploads/photos/' ~ event.photo) }}" class="img-fluid mb-4">
         {% endif %}
         <iframe class="map" src="https://www.google.com/maps/embed/v1/place?q={{ event.location }}&key=AIzaSyBT1eR-6-WGH7L3FDKme0x3AhjHgPOrY74" allowfullscreen></iframe>
     </div>
