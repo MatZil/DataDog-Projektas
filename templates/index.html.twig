@@ -4,7 +4,7 @@
 {% block title %}KTU Events{% endblock %}
 
 {% block body %}
-    <h1 class="text-center mb-4">Events List</h1>
+    <h1 class="display-3 text-break text-center mb-5 pb-3">Upcoming Events</h1>
 
     <div class="mb-5 card card-rounded">
         <div class="card-body">
@@ -20,7 +20,7 @@
                         <i class="material-icons-outlined input-group-text">category</i>
                     </div>
                     <select class="custom-select" name="category">
-                        <option {{ app.request.get('category') ? '' : 'selected' }}>Category</option>
+                        <option {{ app.request.get('category') ? '' : 'selected' }} value="">Category</option>
                         {% for category in categories %}
                             <option {{ app.request.get('category') == category.id ? 'selected' }}
                                     value="{{ category.id }}">{{ category.name }}</option>
@@ -60,13 +60,17 @@
                 </div>
                 {% if event.photo %}
                     <div class="col-5">
-                        <img src="{{ asset('uploads/photos/') ~ event.photo }}" class="card-img p-2">
+                        <div class="m-1">
+                            <img src="{{ asset('uploads/photos/' ~ event.photo) }}" class="card-img rounded-top-right">
+                        </div>
                     </div>
                 {% endif %}
             </div>
             <div class="card-footer bg-white text-muted d-flex flex-wrap">
                 <div class="d-inline-flex">
-                    <i class="material-icons-outlined mr-1">location_on</i>
+                    <!-- stopped working for some reasons -->
+                    <!-- <i class="material-icons-outlined mr-1">location_on</i> -->
+                    <i class="material-icons-outlined mr-1">my_location</i>
                     <span class="mr-2">{{ event.location }}</span>
                 </div>
                 <div class="d-inline-flex">
@@ -100,7 +104,7 @@
         jQuery(document).ready(function ($) {
             $("form").submit(function () {
                 $(this).find(":input").filter(function () {
-                    return !this.value || this.value === 'Category';
+                    return !this.value;
                 }).attr("disabled", "disabled");
                 return true;
             });
