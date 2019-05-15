@@ -37,26 +37,23 @@
                     <div class="dropdown-menu dropdown-menu-right mt-3 mr--1">
                         {% if is_granted('ROLE_ADMIN') %}
                             <a class="dropdown-item d-flex" href="{{ path('app_eventForm', { 'action': 'create' }) }}">
-                                <span class="mr-auto">New Event</span>
+                                <span class="mr-auto">New event</span>
                                 <i class="material-icons-outlined ml-2">add</i>
                             </a>
                             <a class="dropdown-item d-flex" href="{{ path('app_userList') }}">
                                 <span class="mr-auto">Users list</span>
                                 <i class="material-icons-outlined ml-2">people</i>
                             </a>
-                            <a class="dropdown-item d-flex" href="{{ path('app_categoryList') }}">
-                                <span class="mr-auto">Event categories</span>
-                                <i class="material-icons-outlined ml-2">view_list</i>
-                            </a>
+                        {% endif %}
+                        <a class="dropdown-item d-flex" href="{{ path('app_categoryList') }}">
+                            <span class="mr-auto">Event categories</span>
+                            <i class="material-icons-outlined ml-2">category</i>
+                        </a>
+                        {% if is_granted('ROLE_ADMIN') %}
                             <div class="dropdown-divider"></div>
-                            {% else %}
-                                <a class="dropdown-item d-flex" href="{{ path('app_categoryListUser') }}">
-                                    <span class="mr-auto">Event categories</span>
-                                    <i class="material-icons-outlined ml-2">view_list</i>
-                                </a>
                         {% endif %}
                         <a class="dropdown-item d-flex" href="{{ path('app_changePassword') }}">
-                            <span class="mr-auto">Change Password</span>
+                            <span class="mr-auto">Change password</span>
                             <i class="material-icons-outlined ml-2">settings</i>
                         </a>
                         <div class="dropdown-divider"></div>
