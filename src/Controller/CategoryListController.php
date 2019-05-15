@@ -36,10 +36,11 @@ class CategoryListController extends AbstractController
         {
             $manager->remove($category);
             $manager->flush();
+            $this->addFlash('success', 'Category deleted');
         }
         else
         {
-            $this->addFlash('error', 'Category is used to describe an event " ' . $event->getTitle() . ' "');
+            $this->addFlash('danger', 'Category is used to describe an event " ' . $event->getTitle() . ' "');
         }
 
         return $this->redirectToRoute("app_categoryList");
@@ -58,6 +59,7 @@ class CategoryListController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($category);
             $entityManager->flush();
+            $this->addFlash('success', 'Category added');
 
             return $this->redirectToRoute('app_categoryList');
         }
@@ -80,6 +82,7 @@ class CategoryListController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $manager->flush();
+            $this->addFlash('success', 'Category updated');
 
             return $this->redirectToRoute('app_categoryList');
         }
@@ -101,6 +104,7 @@ class CategoryListController extends AbstractController
             $user->addSubscribedCategory($category);
             $manager->persist($user);
             $manager->flush();
+            $this->addFlash('success', 'Category '.$category->getName().' subscribed');
         }
 
         return $this->redirectToRoute("app_categoryList");
@@ -117,6 +121,7 @@ class CategoryListController extends AbstractController
             $user->removeSubscribedCategory($category);
             $manager->persist($user);
             $manager->flush();
+            $this->addFlash('success', 'Category '.$category->getName().' unsubscribed');
         }
 
         return $this->redirectToRoute("app_categoryList");

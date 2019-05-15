@@ -64,8 +64,13 @@ class EventFormController extends AbstractController
 
             $entityManager->persist($event);
             $entityManager->flush();
+            $this->addFlash('success', 'Event '.(($action === 'create') ? 'created' : 'updated'));
 
-            $users = $event->getCategory()->getUsers();
+            $users = [];
+
+            if ($action === 'create') {
+                $users = $event->getCategory()->getUsers();
+            }
 
             foreach ($users as $user) {
                 $message = (new \Swift_Message('New event has been added with your subscribed category'))

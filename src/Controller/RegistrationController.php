@@ -59,6 +59,7 @@ class RegistrationController extends AbstractController
 
             $entityManager->persist($secCode);
             $entityManager->flush();
+            $this->addFlash('success', 'Registration succeed. Check your email inbox for an email verification link');
 
             return $guardHandler->authenticateUserAndHandleSuccess(
                 $user,
@@ -93,8 +94,12 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->render('registration/confirmed.html.twig', [
-            'user' => $user
-        ]);
+        if ($user != null) {
+            $this->addFlash('success', 'Congratulations, ' . $user->getUsername() . '! Your email has just been verified.');
+        } else {
+            $this->addFlash('danger', 'Sorry, this email confirmation link is expired or does not exist');
+        }
+
+        return $this->render('base.html.twig');
     }
 }

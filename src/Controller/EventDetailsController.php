@@ -50,6 +50,7 @@ class EventDetailsController extends AbstractController
 
             $entityManager->persist($comment);
             $entityManager->flush();
+            $this->addFlash('success', 'Comment added');
 
             return $this->redirectToRoute('app_eventDetails', [
                 'eventID' => $eventID]);
@@ -69,6 +70,7 @@ class EventDetailsController extends AbstractController
         if ($comment != null) {
             $manager->remove($comment);
             $manager->flush();
+            $this->addFlash('success', 'Comment deleted');
         }
         return $this->redirectToRoute('app_eventDetails', [
             'eventID' => $eventID]);
@@ -87,6 +89,7 @@ class EventDetailsController extends AbstractController
             }
             $manager->remove($event);
             $manager->flush();
+            $this->addFlash('success', 'Event deleted');
         }
         return $this->redirectToRoute('index');
     }

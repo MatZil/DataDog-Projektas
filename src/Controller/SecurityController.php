@@ -42,8 +42,7 @@ class SecurityController extends AbstractController
      * @Route("/logout", name="app_logout")
      */
     public function logout()
-    {
-    }
+    { }
 
     /**
      * @Route ("/reset", name="app_reset")
@@ -120,14 +119,20 @@ class SecurityController extends AbstractController
                 $entityManager->persist($user);
                 $entityManager->remove($secCode);
                 $entityManager->flush();
+                $this->addFlash('success', 'Password changed');
 
                 return $this->redirectToRoute('index');
             }
         }
 
+        if ($user == null) {
+            $this->addFlash('danger', 'Sorry, this password reset link is expired or does not exist');
+
+            return $this->render('base.html.twig');
+        }
+
         return $this->render('security/change_passwordByReset.html.twig', [
-            'changepassform' => $form->createView(),
-            'user' => $user
+            'changepassform' => $form->createView()
         ]);
     }
 
@@ -153,10 +158,11 @@ class SecurityController extends AbstractController
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($user);
                 $entityManager->flush();
+                $this->addFlash('success', 'Password changed');
 
                 return $this->redirectToRoute('index');
             } else {
-                $this->addFlash('error', 'Current password is incorrect!');
+                $this->addFlash('danger', 'Current password is incorrect!');
             }
         }
 
