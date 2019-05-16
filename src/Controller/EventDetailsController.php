@@ -45,12 +45,14 @@ class EventDetailsController extends AbstractController
             $event = $rep->findOneBySomeField($eventID);
             $user = $this->getUser();
 
-            $comment->setEvent($event);
-            $comment->setUser($user);
+            if ($event != null) {
+                $comment->setEvent($event);
+                $comment->setUser($user);
 
-            $entityManager->persist($comment);
-            $entityManager->flush();
-            $this->addFlash('success', 'Comment added');
+                $entityManager->persist($comment);
+                $entityManager->flush();
+                $this->addFlash('success', 'Comment successfully added');
+            }
 
             return $this->redirectToRoute('app_eventDetails', [
                 'eventID' => $eventID]);
@@ -70,7 +72,7 @@ class EventDetailsController extends AbstractController
         if ($comment != null) {
             $manager->remove($comment);
             $manager->flush();
-            $this->addFlash('success', 'Comment deleted');
+            $this->addFlash('success', 'Comment successfully deleted');
         }
         return $this->redirectToRoute('app_eventDetails', [
             'eventID' => $eventID]);
@@ -89,7 +91,7 @@ class EventDetailsController extends AbstractController
             }
             $manager->remove($event);
             $manager->flush();
-            $this->addFlash('success', 'Event deleted');
+            $this->addFlash('success', 'Event "' . $event->getTitle() . '" successfully deleted');
         }
         return $this->redirectToRoute('index');
     }

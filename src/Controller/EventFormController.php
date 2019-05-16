@@ -23,6 +23,9 @@ class EventFormController extends AbstractController
 
         if ($action === 'edit') {
             $event = $entityManager->getRepository(Event::class)->find($eventID);
+            if ($event == null) {
+                return $this->redirectToRoute('index');
+            }
             $oldPhoto = $event->getPhoto();
         } else {
             $event = new Event();
@@ -64,7 +67,7 @@ class EventFormController extends AbstractController
 
             $entityManager->persist($event);
             $entityManager->flush();
-            $this->addFlash('success', 'Event '.(($action === 'create') ? 'created' : 'updated'));
+            $this->addFlash('success', 'Event "' . $event->getTitle() . '" successfully ' . (($action === 'create') ? 'created' : 'updated'));
 
             $users = [];
 

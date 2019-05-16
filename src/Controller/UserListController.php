@@ -31,7 +31,7 @@ class UserListController extends AbstractController
         {
             $manager->remove($user);
             $manager->flush();
-            $this->addFlash('success', 'User deleted');
+            $this->addFlash('success', 'User "' . $user->getUsername() . '" successfully deleted');
         }
 
         return $this->redirectToRoute("app_userList");

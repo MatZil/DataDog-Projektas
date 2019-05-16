@@ -77,7 +77,7 @@ class SecurityController extends AbstractController
                         'text/html'
                     );
                 $mailer->send($message);
-                $this->addFlash('success', 'link has been sent to this email: ' . $email);
+                $this->addFlash('success', 'Password reset link has been sent to ' . $email . '. Check this email inbox for further instructions to change password');
 
                 $entityManager->persist($secCode);
                 $entityManager->flush();
@@ -121,7 +121,7 @@ class SecurityController extends AbstractController
                 $entityManager->persist($user);
                 $entityManager->remove($secCode);
                 $entityManager->flush();
-                $this->addFlash('success', 'Password changed');
+                $this->addFlash('success', 'Password successfully changed');
 
                 return $guardHandler->authenticateUserAndHandleSuccess(
                     $user,
@@ -165,7 +165,7 @@ class SecurityController extends AbstractController
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($user);
                 $entityManager->flush();
-                $this->addFlash('success', 'Password changed');
+                $this->addFlash('success', 'Password successfully changed');
 
                 return $this->redirectToRoute('index');
             } else {
