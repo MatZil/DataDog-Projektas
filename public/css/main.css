@@ -19,9 +19,11 @@ label.required::before {
 
 .border-width-3 {
     border-width:3px !important;
-    padding: 7px 7px 7px 7px;
 }
 
+.p-list {
+    padding: .75rem 1rem;
+}
 
 
 .rounded-top-right {
