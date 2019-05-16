@@ -17,6 +17,13 @@ label.required::before {
     margin-right: -.25rem !important;
 }
 
+.border-width-3 {
+    border-width:3px !important;
+    padding: 7px 7px 7px 7px;
+}
+
+
+
 .rounded-top-right {
     border-top-right-radius: .5rem !important;
 }
