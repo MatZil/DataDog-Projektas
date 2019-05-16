@@ -32,7 +32,7 @@ class Event
     private $title;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime") 
      */
     private $date;
 
@@ -111,6 +111,8 @@ class Event
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->date = new \DateTime();
+        $this->price = 0.00;
     }
 
     public function getId(): ?int
