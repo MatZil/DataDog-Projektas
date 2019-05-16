@@ -69,7 +69,20 @@
     </header>
 {% endblock %}
 
-<div class="content">
+<div class="container my-5 py-2">
+    {% block alert %}
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                    <span>{{ message }}</span>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    {% endblock %}
+
     {% block body %}{% endblock %}
 </div>
 

@@ -9,7 +9,7 @@
     {{ form_widget(eventForm) }}
     {% if photo %}
         <p><input type="checkbox" name="deleteCheckBox"> Delete Photo</p>
-        <img src="{{ asset('uploads/photos/') ~ photo }}" class="w-25 mb-4"><br>
+        <img src="{{ asset('uploads/photos/' ~ photo) }}" class="w-25 mb-4"><br>
     {% endif %}
     <button class="btn btn-primary">{{ action }} Event</button>
     {{ form_end(eventForm) }}

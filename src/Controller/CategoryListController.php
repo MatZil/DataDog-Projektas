@@ -30,16 +30,16 @@ class CategoryListController extends AbstractController
     {
         $manager = $this->getDoctrine()->getManager();
         $category = $manager->getRepository(Category::class)->find($id);
-        $event = $manager->getRepository(Event::class)->findOneBy(['category' => $category->getId()]);
 
-        if ($category != null && !$event)
-        {
-            $manager->remove($category);
-            $manager->flush();
-        }
-        else
-        {
-            $this->addFlash('error', 'Category is used to describe an event " ' . $event->getTitle() . ' "');
+        if ($category != null) {
+            $event = $manager->getRepository(Event::class)->findOneBy(['category' => $category->getId()]);
+            if ($event == null) {
+                $manager->remove($category);
+                $manager->flush();
+                $this->addFlash('success', 'Category "' . $category->getName() . '" successfully deleted');
+            } else {
+                $this->addFlash('danger', 'Category is used to describe an event "' . $event->getTitle() . '"');
+            }
         }
 
         return $this->redirectToRoute("app_categoryList");
@@ -58,6 +58,7 @@ class CategoryListController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($category);
             $entityManager->flush();
+            $this->addFlash('success', 'Category "' . $category->getName() . '" successfully created');
 
             return $this->redirectToRoute('app_categoryList');
         }
@@ -80,6 +81,7 @@ class CategoryListController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $manager->flush();
+            $this->addFlash('success', 'Category "' . $category->getName() . '" successfully updated');
 
             return $this->redirectToRoute('app_categoryList');
         }
@@ -101,6 +103,7 @@ class CategoryListController extends AbstractController
             $user->addSubscribedCategory($category);
             $manager->persist($user);
             $manager->flush();
+            // $this->addFlash('success', 'Category "'.$category->getName().'" successfully subscribed');
         }
 
         return $this->redirectToRoute("app_categoryList");
@@ -117,6 +120,7 @@ class CategoryListController extends AbstractController
             $user->removeSubscribedCategory($category);
             $manager->persist($user);
             $manager->flush();
+            // $this->addFlash('success', 'Category "'.$category->getName().'" successfully unsubscribed');
         }
 
         return $this->redirectToRoute("app_categoryList");

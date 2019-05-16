@@ -1,38 +1,61 @@
 {% extends 'base.html.twig' %}
 {% block title %}{{ event.title }}{% endblock %}
 {% block body %}
-<h1 class="text-center mb-5">{{ event.title }}
-    {% if is_granted('ROLE_ADMIN') %}
-        <a class="btn btn-danger float-right js-delete-btn" href="{{ path('app_deleteEvent', {'eventID':event.id}) }}">Delete Event</a>
-        <a class="btn btn-primary float-right mr-1" href="{{ path('app_eventForm', {'action':'edit'}) }}/{{ event.id }}">Edit Event</a>
-    {% endif %}
-</h1>
-
-<div class="row">
-    <div class="col-7">
-        <p>Category: {{ event.category }}</p>
-        <p>Date and time: {{ event.date | date("Y-m-d H:i") }}</p>
-        <p>Location: {{ event.location }}</p>
-        <p>Price: {{ event.price == 0 ? 'FREE' : (event.price | number_format(2) ~ ' &euro;') | raw}}</p>
-        <p class="text-break">{{ event.description }}</p>
-    </div>
-    <div class="col-5">
-        {% if event.photo %}
-            <img src="{{ asset('uploads/photos/') ~ event.photo }}" class="img-fluid mb-4">
+    <div class="d-flex align-items-center mb-4">
+        <h1 class="display-4 text-break text-center flex-grow-1 pb-3">{{ event.title }}</h1>
+        {% if is_granted('ROLE_ADMIN') %}
+            <div class="text-right">
+                <a class="btn btn-primary mb-1 mb-md-0"
+                   href="{{ path('app_eventForm', {'action':'edit'}) }}/{{ event.id }}">Edit Event</a>
+                <a class="btn btn-danger js-delete-btn" href="{{ path('app_deleteEvent', {'eventID':event.id}) }}">Delete
+                    Event</a>
+            </div>
         {% endif %}
-        <iframe class="map" src="https://www.google.com/maps/embed/v1/place?q={{ event.location }}&key=AIzaSyBT1eR-6-WGH7L3FDKme0x3AhjHgPOrY74" allowfullscreen></iframe>
     </div>
-</div>
+
+    <div class="row mb-4">
+        <div class="col-md-7">
+            <div class="card border-width-3 card-rounded mb-3">
+                <div class="d-flex p-list">
+                    <i class="material-icons-outlined mr-1">category</i>
+                    <h5 class="card-text">Category: <a href="{{ path('app_categoryList') }}">{{ event.category }}</a></h5>
+                </div>
+                <div class="d-flex p-list">
+                    <i class="material-icons-outlined mr-1">access_time</i>
+                    <h5 class="card-text">Date and time: {{ event.date | date("Y-m-d H:i") }}</h5>
+                </div>
+                <div class="d-flex p-list">
+                    <i class="material-icons-outlined mr-1">my_location</i>
+                    <h5 class="card-text">Location: {{ event.location }}</h5>
+                </div>
+                <div class="d-flex p-list">
+                    <i class="material-icons-outlined mr-1">monetization_on</i>
+                    <h5 class="card-text">Price: {{ event.price == 0 ? 'FREE' : (event.price | number_format(2) ~ ' &euro;') | raw }}</h5>
+                </div>
+            </div>
+
+            <p class="text-break" style="font-size:1.15rem">{{ event.description }}</p>
+        </div>
+        <div class="col-md-5">
+            {% if event.photo %}
+                <img src="{{ asset('uploads/photos/' ~ event.photo) }}" class="img-fluid mb-4">
+            {% endif %}
+            <iframe class="map"
+                    src="https://www.google.com/maps/embed/v1/place?q={{ event.location }}&key=AIzaSyBT1eR-6-WGH7L3FDKme0x3AhjHgPOrY74"
+                    allowfullscreen></iframe>
+        </div>
+    </div>
     <div>
         <h3>Comments: ({{ event.comments | length }})</h3>
         <div class="text-right">
-            <a class="btn btn-primary btn-bg mb-2" href="{{ path('app_addComment', { 'eventID': event.id }) }}">Add comment</a>
+            <a class="btn btn-primary btn-bg mb-2" href="{{ path('app_addComment', { 'eventID': event.id }) }}">Add
+                comment</a>
         </div>
         {% for comment in event.comments %}
             <div class="card mb-2">
                 <h5 class="card-header">
                     {% if comment.user %}
-                    {{ comment.user.firstname }} ({{ comment.user.username }})
+                        {{ comment.user.firstname }} ({{ comment.user.username }})
                     {% else %}
                         DELETED USER
                     {% endif %}
@@ -40,7 +63,8 @@
                         {{ comment.createdAt | date("Y-m-d H:i", "Europe/Vilnius") }}
                     </small>
                     {% if is_granted('ROLE_ADMIN') %}
-                        <a class="btn btn-danger btn-sm float-right js-delete-comm" href="{{ path('app_deleteComment', { 'commentID': comment.id, 'eventID': event.id }) }}">Delete</a>
+                        <a class="btn btn-danger btn-sm float-right js-delete-comm"
+                           href="{{ path('app_deleteComment', { 'commentID': comment.id, 'eventID': event.id }) }}">Delete</a>
                     {% endif %}
                 </h5>
                 <div class="card-body">
@@ -56,7 +80,7 @@
 
     {% if is_granted('ROLE_ADMIN') %}
         <script>
-            $(document).ready(function() {
+            $(document).ready(function () {
                 $('.js-delete-btn').on('click', function () {
                     return confirm('Are you sure you would like to delete this event?');
                 });
@@ -66,6 +90,4 @@
             });
         </script>
     {% endif %}
-
 {% endblock %}
-

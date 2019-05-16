@@ -14,6 +14,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use App\Entity\SecurityCode;
+use App\Security\LoginFormAuthenticator;
+use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 
 class SecurityController extends AbstractController
 {
@@ -42,8 +44,7 @@ class SecurityController extends AbstractController
      * @Route("/logout", name="app_logout")
      */
     public function logout()
-    {
-    }
+    { }
 
     /**
      * @Route ("/reset", name="app_reset")
@@ -76,7 +77,7 @@ class SecurityController extends AbstractController
                         'text/html'
                     );
                 $mailer->send($message);
-                $this->addFlash('success', 'link has been sent to this email: ' . $email);
+                $this->addFlash('success', 'Password reset link has been sent to ' . $email . '. Check this email inbox for further instructions to change password');
 
                 $entityManager->persist($secCode);
                 $entityManager->flush();
@@ -94,7 +95,7 @@ class SecurityController extends AbstractController
     /**
      * @Route ("/reset/{code}", name="app_changePsw")
      */
-    public function resetPasswordChangePassword(Request $request, $code = "", UserPasswordEncoderInterface $passwordEncoder)
+    public function resetPasswordChangePassword(Request $request, $code = "", UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $formAuthenticator)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $secCode = $entityManager->getRepository(SecurityCode::class)->findOneBy([
@@ -120,14 +121,25 @@ class SecurityController extends AbstractController
                 $entityManager->persist($user);
                 $entityManager->remove($secCode);
                 $entityManager->flush();
+                $this->addFlash('success', 'Password successfully changed');
 
-                return $this->redirectToRoute('index');
+                return $guardHandler->authenticateUserAndHandleSuccess(
+                    $user,
+                    $request,
+                    $formAuthenticator,
+                    'main'
+                );
             }
         }
 
+        if ($user == null) {
+            $this->addFlash('danger', 'Sorry, this password reset link is expired or does not exist');
+
+            return $this->render('base.html.twig');
+        }
+
         return $this->render('security/change_passwordByReset.html.twig', [
-            'changepassform' => $form->createView(),
-            'user' => $user
+            'changepassform' => $form->createView()
         ]);
     }
 
@@ -153,10 +165,11 @@ class SecurityController extends AbstractController
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($user);
                 $entityManager->flush();
+                $this->addFlash('success', 'Password successfully changed');
 
                 return $this->redirectToRoute('index');
             } else {
-                $this->addFlash('error', 'Current password is incorrect!');
+                $this->addFlash('danger', 'Current password is incorrect!');
             }
         }
 
