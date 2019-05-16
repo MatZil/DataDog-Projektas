@@ -14,6 +14,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use App\Entity\SecurityCode;
+use App\Security\LoginFormAuthenticator;
+use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 
 class SecurityController extends AbstractController
 {
@@ -93,7 +95,7 @@ class SecurityController extends AbstractController
     /**
      * @Route ("/reset/{code}", name="app_changePsw")
      */
-    public function resetPasswordChangePassword(Request $request, $code = "", UserPasswordEncoderInterface $passwordEncoder)
+    public function resetPasswordChangePassword(Request $request, $code = "", UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $formAuthenticator)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $secCode = $entityManager->getRepository(SecurityCode::class)->findOneBy([
@@ -121,7 +123,12 @@ class SecurityController extends AbstractController
                 $entityManager->flush();
                 $this->addFlash('success', 'Password changed');
 
-                return $this->redirectToRoute('index');
+                return $guardHandler->authenticateUserAndHandleSuccess(
+                    $user,
+                    $request,
+                    $formAuthenticator,
+                    'main'
+                );
             }
         }
 
