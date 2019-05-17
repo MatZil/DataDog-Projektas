@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Controller;
+namespace App\tests\Controller;
 
 use App\Entity\Category;
 use App\Entity\User;
