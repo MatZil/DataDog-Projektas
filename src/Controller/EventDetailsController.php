@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class EventDetailsController extends AbstractController
 {
     /**
-     * @Route("/events/{eventID}", name="app_eventDetails")
+     * @Route("/event/{eventID}", name="app_eventDetails")
      */
     public function event($eventID)
     {
@@ -30,7 +30,7 @@ class EventDetailsController extends AbstractController
     }
 
     /**
-     * @Route("/events/{eventID}/add_comment", name="app_addComment")
+     * @Route("/event/{eventID}/comment/add", name="app_addComment")
      */
     public function addComment(Request $request, $eventID){
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
@@ -63,8 +63,80 @@ class EventDetailsController extends AbstractController
         ]);
     }
 
+
     /**
-     * @Route("/admin/events/{eventID}/delete_comment/{commentID}", name="app_deleteComment")
+     * @Route("/event/{eventID}/comment/{commentID}/reply", name="app_replyComment")
+     */
+    public function replyComment(Request $request, $eventID, $commentID)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+
+        $comment = new Comment();
+        $form = $this->createForm(CommentFormType::class, $comment);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+
+            $parent = $this->getDoctrine()->getRepository(Comment::class)->find($commentID);
+            $user = $this->getUser();
+
+            if ($parent != null) {
+                $comment->setParentComment($parent);
+                $comment->setUser($user);
+
+                $entityManager->persist($comment);
+                $entityManager->flush();
+                $this->addFlash('success', 'Reply successfully added');
+            }
+
+            return $this->redirectToRoute('app_eventDetails', [
+                'eventID' => $eventID
+            ]);
+        }
+
+        return $this->render('events/comment_form.html.twig', [
+            'addcommentform' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/event/{eventID}/comment/{commentID}/edit", name="app_editComment")
+     */
+    public function editComment(Request $request, $eventID, $commentID)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $comment = $this->getDoctrine()->getRepository(Comment::class)->find($commentID);
+
+        $user = $this->getUser();
+        if ($comment != null && ($user === $comment->getUser() || $this->isGranted('ROLE_ADMIN'))) {
+        } else {
+            return $this->redirectToRoute('app_eventDetails', [
+                'eventID' => $eventID
+            ]);
+        }
+
+        $form = $this->createForm(CommentFormType::class, $comment);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+            $this->addFlash('success', 'Reply successfully updated');
+
+            return $this->redirectToRoute('app_eventDetails', [
+                'eventID' => $eventID
+            ]);
+        }
+
+        return $this->render('events/comment_form.html.twig', [
+            'addcommentform' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/admin/event/{eventID}/comment/{commentID}/delete", name="app_deleteComment")
      */
     public function commentDelete($commentID, $eventID){
         $manager = $this->getDoctrine()->getManager();
@@ -79,7 +151,7 @@ class EventDetailsController extends AbstractController
     }
 
     /**
-     * @Route("/admin/events/{eventID}/delete", name="app_deleteEvent")
+     * @Route("/admin/event/{eventID}/delete", name="app_deleteEvent")
      */
     public function eventDelete($eventID){
         $manager = $this->getDoctrine()->getManager();

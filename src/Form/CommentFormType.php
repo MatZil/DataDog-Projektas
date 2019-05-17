@@ -18,7 +18,7 @@ class CommentFormType extends AbstractType
         $builder
             ->add('content', TextareaType::class, [
                 'help' => 'Up to 180 characters long',
-                //'attr' => ['autofocus' => null]
+                'attr' => ['autofocus' => null]
             ])
             ->add('submit', SubmitType::class);
         ;
