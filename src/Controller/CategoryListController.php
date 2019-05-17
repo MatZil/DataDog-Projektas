@@ -95,10 +95,12 @@ class CategoryListController extends AbstractController
      */
     public function subscribeCategory($id)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+
         $user = $this->getUser();
         $manager = $this->getDoctrine()->getManager();
         $category = $manager->getRepository(Category::class)->find($id);
-        if ($user != null && $category != null) {
+        if ($category != null) {
             $user->addSubscribedCategory($category);
             $manager->persist($user);
             $manager->flush();
