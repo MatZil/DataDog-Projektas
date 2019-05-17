@@ -31,6 +31,7 @@ class EventFormType extends AbstractType
             ])
             ->add('date', DateTimeType::class, [
                 'years' => range(date('Y'), date('Y')+10),
+                'date_format' => 'yyyy-MM-dd h:min',
                 'label' => 'Date and time'
             ])
             ->add('location')
