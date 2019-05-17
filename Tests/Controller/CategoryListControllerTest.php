@@ -29,12 +29,6 @@ class CategoryListControllerTest extends WebTestCase
     public function testCategories()
     {
         $client = self::createClient();
-        $client->request('GET', '/categories');
-        // Returns code 302, because user is not logged in and is redirected to index page
-        $this->assertEquals(302, $client->getResponse()->getStatusCode());
-
-        // Login admin with username: admin (has to be registered to the website with admin privileges)
-        $client = $this->createAuthorizedClient();
         $crawler = $client->request('GET', '/categories');
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
 

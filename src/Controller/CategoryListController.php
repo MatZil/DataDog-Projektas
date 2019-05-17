@@ -18,14 +18,9 @@ class CategoryListController extends AbstractController
     public function categories()
     {
         $categories = $this->getDoctrine()->getRepository(Category::class)->findAll();
-        $user = $this->getUser();
 
-        if (!$user) {
-            return $this->redirectToRoute('index');
-        } else {
-            return $this->render('categories/categories.html.twig', array(
-                'categories' => $categories));
-        }
+        return $this->render('categories/categories.html.twig', array(
+            'categories' => $categories));
     }
 
     /**
@@ -100,7 +95,6 @@ class CategoryListController extends AbstractController
      */
     public function subscribeCategory($id)
     {
-
         $user = $this->getUser();
         $manager = $this->getDoctrine()->getManager();
         $category = $manager->getRepository(Category::class)->find($id);

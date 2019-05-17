@@ -5,13 +5,13 @@
 {% block body %}
     <h1>Categories:</h1>
     {% if is_granted('ROLE_ADMIN') %}
-    <a class="btn btn-primary btn-bg float-right mb-2" href="{{ path('app_categoryAdd') }}">Add category</a>
+        <a class="btn btn-primary btn-bg float-right mb-2" href="{{ path('app_categoryAdd') }}">Add category</a>
     {% endif %}
     <table class="table table-hover">
         <thead>
         <tr>
             {% if is_granted('ROLE_ADMIN') %}
-            <th>ID</th>
+                <th>ID</th>
             {% endif %}
             <th>Name</th>
             <th></th>
@@ -22,19 +22,25 @@
 
             <tr>
                 {% if is_granted('ROLE_ADMIN') %}
-                <th>{{ category.id }}</th>
+                    <th>{{ category.id }}</th>
                 {% endif %}
                 <td>{{ category.name }}</td>
                 <td class="text-right">
-                {% if category.name in app.user.subscribedCategories %}
-                    <a class="btn btn-secondary btn-sm" role="button" id="unsubscribe" href="{{ path('app_categoryUnsubscribe', { 'id': category.id }) }}">Unsubscribe</a>
-                {% else %}
-                    <a class="btn btn-secondary btn-sm" role="button" id="subscribe" href="{{ path('app_categorySubscribe', { 'id': category.id }) }}">Subscribe</a>
-                {% endif %}
-                {% if is_granted('ROLE_ADMIN') %}
-                    <a class="btn btn-info btn-sm" href="{{ path('app_categoryEdit', { 'id': category.id }) }}">Edit</a>
-                    <a class="btn btn-danger btn-sm js-delete-btn" href="{{ path('app_categoryDelete', { 'id': category.id }) }}">Delete</a>
-                {% endif %}
+                    {% if not app.user %}
+                        {% if category.name in app.user.subscribedCategories %}
+                            <a class="btn btn-secondary btn-sm" role="button" id="unsubscribe"
+                               href="{{ path('app_categoryUnsubscribe', { 'id': category.id }) }}">Unsubscribe</a>
+                        {% else %}
+                            <a class="btn btn-secondary btn-sm" role="button" id="subscribe"
+                               href="{{ path('app_categorySubscribe', { 'id': category.id }) }}">Subscribe</a>
+                        {% endif %}
+                    {% endif %}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a class="btn btn-info btn-sm"
+                           href="{{ path('app_categoryEdit', { 'id': category.id }) }}">Edit</a>
+                        <a class="btn btn-danger btn-sm js-delete-btn"
+                           href="{{ path('app_categoryDelete', { 'id': category.id }) }}">Delete</a>
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}
@@ -45,7 +51,7 @@
     {{ parent() }}
 
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('.js-delete-btn').on('click', function (e) {
                 let name = $(this).parent().siblings('td')[0].innerHTML;
                 return confirm('Are you sure you would like to delete category: ' + name + '?');
