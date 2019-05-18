@@ -22,17 +22,20 @@
                 <td>{{ user.firstName }}</td>
                 <td>{{ user.surname }}</td>
                 <td>{{ user.email }}</td>
-                <td class="text-right"><a class="btn btn-danger btn-sm js-delete-btn" href="{{ path('app_userDelete', { 'id': user.id }) }}">Delete</a></td>
+                <td class="text-right">
+                    <a class="btn btn-danger btn-sm js-delete-btn"
+                       href="{{ path('app_userDelete', { 'id': user.id }) }}">Delete</a>
+                </td>
             </tr>
         {% endfor %}
-        </table>
+    </table>
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
 
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('.js-delete-btn').on('click', function (e) {
                 let username = $(this).parent().siblings('td')[0].innerHTML;
                 return confirm('Are you sure you would like to delete user: ' + username + '?');

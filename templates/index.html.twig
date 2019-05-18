@@ -1,4 +1,3 @@
-
 {% extends 'base.html.twig' %}
 
 {% block title %}KTU Events{% endblock %}
@@ -13,7 +12,8 @@
                     <div class="input-group-prepend">
                         <i class="material-icons-outlined input-group-text">title</i>
                     </div>
-                    <input type="text" class="form-control" name="title" value="{{ app.request.get('title') }}" placeholder="Title">
+                    <input type="text" class="form-control" name="title" value="{{ app.request.get('title') }}"
+                           placeholder="Title">
                 </div>
                 <div class="input-group col-md-6 col-xl-2 mb-1 mb-xl-0">
                     <div class="input-group-prepend">
@@ -31,15 +31,18 @@
                     <div class="input-group-prepend">
                         <i class="material-icons-outlined input-group-text">date_range</i>
                     </div>
-                    <input type="date" class="form-control" name="start-date" value="{{ app.request.get('start-date') }}">
+                    <input type="date" class="form-control" name="start-date"
+                           value="{{ app.request.get('start-date') }}">
                     <input type="date" class="form-control" name="end-date" value="{{ app.request.get('end-date') }}">
                 </div>
                 <div class="input-group col-md-4 col-xl-2 mb-1 mb-xl-0">
                     <div class="input-group-prepend">
                         <i class="material-icons-outlined input-group-text">attach_money</i>
                     </div>
-                    <input type="text" class="form-control" name="min-price" value="{{ app.request.get('min-price') }}" placeholder="Min">
-                    <input type="text" class="form-control" name="max-price" value="{{ app.request.get('max-price') }}" placeholder="Max">
+                    <input type="text" class="form-control" name="min-price" value="{{ app.request.get('min-price') }}"
+                           placeholder="Min">
+                    <input type="text" class="form-control" name="max-price" value="{{ app.request.get('max-price') }}"
+                           placeholder="Max">
                 </div>
                 <div class="text-right col-md-2 col-xl-1">
                     <button type="submit" class="btn btn-outline-primary">Filter</button>
@@ -79,7 +82,7 @@
                 </div>
                 <div class="d-inline-flex">
                     <i class="material-icons-outlined mr-1">monetization_on</i>
-                    <span>{{ event.price == 0 ? 'FREE' : (event.price | number_format(2) ~ ' &euro;') | raw}}</span>
+                    <span>{{ event.price == 0 ? 'FREE' : (event.price | number_format(2) ~ ' &euro;') | raw }}</span>
                 </div>
             </div>
         </div>

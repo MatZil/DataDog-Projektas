@@ -28,10 +28,10 @@
                 <td class="text-right">
                     {% if app.user and category.name in app.user.subscribedCategories %}
                         <a class="btn btn-secondary btn-sm" role="button" id="unsubscribe"
-                            href="{{ path('app_categoryUnsubscribe', { 'id': category.id }) }}">Unsubscribe</a>
+                           href="{{ path('app_categoryUnsubscribe', { 'id': category.id }) }}">Unsubscribe</a>
                     {% else %}
                         <a class="btn btn-secondary btn-sm" role="button" id="subscribe"
-                            href="{{ path('app_categorySubscribe', { 'id': category.id }) }}">Subscribe</a>
+                           href="{{ path('app_categorySubscribe', { 'id': category.id }) }}">Subscribe</a>
                     {% endif %}
                     {% if is_granted('ROLE_ADMIN') %}
                         <a class="btn btn-info btn-sm"

@@ -18,7 +18,8 @@
             <div class="card border-width-3 card-rounded mb-3">
                 <div class="d-flex p-list">
                     <i class="material-icons-outlined mr-1">category</i>
-                    <h5 class="card-text">Category: <a href="{{ path('app_categoryList') }}">{{ event.category }}</a></h5>
+                    <h5 class="card-text">Category: <a href="{{ path('app_categoryList') }}">{{ event.category }}</a>
+                    </h5>
                 </div>
                 <div class="d-flex p-list">
                     <i class="material-icons-outlined mr-1">access_time</i>
@@ -30,7 +31,8 @@
                 </div>
                 <div class="d-flex p-list">
                     <i class="material-icons-outlined mr-1">monetization_on</i>
-                    <h5 class="card-text">Price: {{ event.price == 0 ? 'FREE' : (event.price | number_format(2) ~ ' &euro;') | raw }}</h5>
+                    <h5 class="card-text">
+                        Price: {{ event.price == 0 ? 'FREE' : (event.price | number_format(2) ~ ' &euro;') | raw }}</h5>
                 </div>
             </div>
 
