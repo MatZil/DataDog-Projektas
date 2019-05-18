@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Tests\Controller;
-
 
 use App\Entity\Category;
 use App\Entity\Event;
@@ -37,7 +35,7 @@ class EventFormControllerTest extends WebTestCase
         $em = $container->get('doctrine')->getManager();
         $em->persist($category);
         $em->flush();
-        $path = $client->getContainer()->get('router')->generate('app_eventForm', ['action'=>'create'], false);
+        $path = $client->getContainer()->get('router')->generate('app_eventForm', ['action' => 'create'], false);
         $crawler = $client->request('GET', $path);
         // Fill in the form and submit it
         $form = $crawler->selectButton('Create Event')->form([

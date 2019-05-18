@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Form;
-
 
 use App\Entity\Category;
 use Symfony\Component\Form\AbstractType;
@@ -20,7 +18,6 @@ class CategoryFormType extends AbstractType
                 'attr' => ['autofocus' => null]
             ])
             ->add('submit', SubmitType::class);
-        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)

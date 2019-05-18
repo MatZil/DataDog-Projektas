@@ -20,7 +20,8 @@ class CategoryListController extends AbstractController
         $categories = $this->getDoctrine()->getRepository(Category::class)->findAll();
 
         return $this->render('categories/categories.html.twig', array(
-            'categories' => $categories));
+            'categories' => $categories
+        ));
     }
 
     /**
@@ -90,6 +91,7 @@ class CategoryListController extends AbstractController
             'addcategoryform' => $form->createView()
         ]);
     }
+
     /**
      * @Route("/category/{id}/subscribe", name="app_categorySubscribe")
      */
@@ -109,6 +111,7 @@ class CategoryListController extends AbstractController
 
         return $this->redirectToRoute("app_categoryList");
     }
+
     /**
      * @Route("/category/{id}/unsubscribe", name="app_categoryUnsubscribe")
      */

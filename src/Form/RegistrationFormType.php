@@ -44,8 +44,7 @@ class RegistrationFormType extends AbstractType
                 ],
             ])
             ->add('firstName')
-            ->add('surname')
-        ;
+            ->add('surname');
     }
 
     public function configureOptions(OptionsResolver $resolver)

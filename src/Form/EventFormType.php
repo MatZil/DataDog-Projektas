@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Form;
-
 
 use App\Entity\Category;
 use App\Entity\Event;
@@ -30,7 +28,7 @@ class EventFormType extends AbstractType
                 'help' => 'Minimum of 15 characters',
             ])
             ->add('date', DateTimeType::class, [
-                'years' => range(date('Y'), date('Y')+10),
+                'years' => range(date('Y'), date('Y') + 10),
                 'date_format' => 'yyyy-MM-dd h:min',
                 'label' => 'Date and time'
             ])
@@ -44,8 +42,7 @@ class EventFormType extends AbstractType
                 'label' => 'Event photo',
                 'help' => '200x200px to 900x900px size',
                 'data_class' => null
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

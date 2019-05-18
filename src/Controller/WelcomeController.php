@@ -19,7 +19,9 @@ class WelcomeController extends AbstractController
         $title = $request->query->get('title');
 
         foreach (explode(' ', $title) as $word) {
-            if (empty($word)) continue;
+            if (empty($word)) {
+                continue;
+            }
             $criteria[] = [
                 'property' => 'title',
                 'value' => '%' . $word . '%',

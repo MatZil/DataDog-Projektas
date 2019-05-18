@@ -14,9 +14,9 @@ class EmailFormType extends AbstractType
     {
         $builder
             ->add('email', EmailType::class, [
-                    'label' => false,
-                    'attr' => ['autofocus' => null]
-                ])
+                'label' => false,
+                'attr' => ['autofocus' => null]
+            ])
             ->add('send', SubmitType::class);
     }
 

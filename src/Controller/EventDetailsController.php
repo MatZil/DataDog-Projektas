@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Controller;
 
 use App\Entity\Comment;
@@ -18,12 +17,12 @@ class EventDetailsController extends AbstractController
      */
     public function event($eventID)
     {
-        $rep = $this->getDoctrine()->getRepository(Event::class);
-        $event = $rep->findOneBySomeField($eventID);
+        $event = $this->getDoctrine()->getRepository(Event::class)->find($eventID);
 
         if ($event == null) {
             return $this->redirectToRoute("index");
         }
+
         return $this->render('events/eventDetails.html.twig', [
             'event' => $event
         ]);
@@ -32,7 +31,8 @@ class EventDetailsController extends AbstractController
     /**
      * @Route("/event/{eventID}/comment/add", name="app_commentAdd")
      */
-    public function addComment(Request $request, $eventID){
+    public function addComment(Request $request, $eventID)
+    {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $comment = new Comment();
         $form = $this->createForm(CommentFormType::class, $comment);
@@ -41,8 +41,7 @@ class EventDetailsController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
 
-            $rep = $this->getDoctrine()->getRepository(Event::class);
-            $event = $rep->findOneBySomeField($eventID);
+            $event = $this->getDoctrine()->getRepository(Event::class)->find($eventID);
             $user = $this->getUser();
 
             if ($event != null) {
@@ -55,7 +54,8 @@ class EventDetailsController extends AbstractController
             }
 
             return $this->redirectToRoute('app_eventDetails', [
-                'eventID' => $eventID]);
+                'eventID' => $eventID
+            ]);
         }
 
         return $this->render('events/comment_form.html.twig', [
@@ -138,7 +138,8 @@ class EventDetailsController extends AbstractController
     /**
      * @Route("/admin/event/{eventID}/comment/{commentID}/delete", name="app_commentDelete")
      */
-    public function commentDelete($commentID, $eventID){
+    public function commentDelete($commentID, $eventID)
+    {
         $manager = $this->getDoctrine()->getManager();
         $comment = $manager->getRepository(Comment::class)->find($commentID);
         if ($comment != null) {
@@ -147,19 +148,21 @@ class EventDetailsController extends AbstractController
             $this->addFlash('success', 'Comment successfully deleted');
         }
         return $this->redirectToRoute('app_eventDetails', [
-            'eventID' => $eventID]);
+            'eventID' => $eventID
+        ]);
     }
 
     /**
      * @Route("/admin/event/{eventID}/delete", name="app_eventDelete")
      */
-    public function eventDelete($eventID){
+    public function eventDelete($eventID)
+    {
         $manager = $this->getDoctrine()->getManager();
         $event = $manager->getRepository(Event::class)->find($eventID);
-        if ($event != null){
-            if($event->getPhoto()){
+        if ($event != null) {
+            if ($event->getPhoto()) {
                 $fileSystem = new Filesystem();
-                $fileSystem->remove($this->getParameter('photo_directory').'/'.$event->getPhoto());
+                $fileSystem->remove($this->getParameter('photo_directory') . '/' . $event->getPhoto());
             }
             $manager->remove($event);
             $manager->flush();
@@ -167,8 +170,4 @@ class EventDetailsController extends AbstractController
         }
         return $this->redirectToRoute('index');
     }
-
-
-
-
 }

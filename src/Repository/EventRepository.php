@@ -26,17 +26,23 @@ class EventRepository extends ServiceEntityRepository
         foreach ($criteria as $cr) {
             switch ($cr['type']) {
                 case 'eq':
-                    if (!isset($cr['value'])) break;
+                    if (!isset($cr['value'])) {
+                        break;
+                    }
                     $qb = $qb->andWhere("e." . $cr['property'] . " = '" . $cr['value'] . "'");
                     break;
 
                 case 'like':
-                    if (!isset($cr['value'])) break;
+                    if (!isset($cr['value'])) {
+                        break;
+                    }
                     $qb = $qb->andWhere("e." . $cr['property'] . " LIKE '" . $cr['value'] . "'");
                     break;
 
                 case 'range':
-                    if (!isset($cr['value1']) || !isset($cr['value2'])) break;
+                    if (!isset($cr['value1']) || !isset($cr['value2'])) {
+                        break;
+                    }
                     $qb = $qb->andWhere("e." . $cr['property'] . " BETWEEN '" . $cr['value1'] . "' AND '" . $cr['value2'] . "'");
                     break;
             }
@@ -61,16 +67,4 @@ class EventRepository extends ServiceEntityRepository
         ;
     }
     */
-
-
-    public function findOneBySomeField($value): ?Event
-    {
-        return $this->createQueryBuilder('e')
-            ->andWhere('e.id = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-
 }

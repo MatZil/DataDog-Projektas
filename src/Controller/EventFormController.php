@@ -2,9 +2,7 @@
 
 namespace App\Controller;
 
-
 use App\Entity\Event;
-use App\Entity\User;
 use App\Form\EventFormType;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Routing\Annotation\Route;
@@ -67,7 +65,10 @@ class EventFormController extends AbstractController
 
             $entityManager->persist($event);
             $entityManager->flush();
-            $this->addFlash('success', 'Event "' . $event->getTitle() . '" successfully ' . (($action === 'create') ? 'created' : 'updated'));
+            $this->addFlash(
+                'success',
+                'Event "' . $event->getTitle() . '" successfully ' . (($action === 'create') ? 'created' : 'updated')
+            );
 
             $users = [];
 
@@ -98,7 +99,6 @@ class EventFormController extends AbstractController
             'action' => ucfirst($action),
             'photo' => $oldPhoto
         ]);
-
     }
 
     /**

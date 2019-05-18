@@ -95,7 +95,10 @@ class RegistrationController extends AbstractController
         }
 
         if ($user != null) {
-            $this->addFlash('success', 'Congratulations, ' . $user->getUsername() . '! Your email has just been verified');
+            $this->addFlash(
+                'success',
+                'Congratulations, ' . $user->getUsername() . '! Your email has just been verified'
+            );
         } else {
             $this->addFlash('danger', 'Sorry, this email confirmation link is expired or does not exist');
         }

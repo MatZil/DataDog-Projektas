@@ -44,7 +44,8 @@ class SecurityController extends AbstractController
      * @Route("/logout", name="app_logout")
      */
     public function logout()
-    { }
+    {
+    }
 
     /**
      * @Route ("/reset", name="app_reset")
@@ -77,7 +78,10 @@ class SecurityController extends AbstractController
                         'text/html'
                     );
                 $mailer->send($message);
-                $this->addFlash('success', 'Password reset link has been sent to ' . $email . '. Check this email inbox for further instructions to change password');
+                $this->addFlash(
+                    'success',
+                    'Password reset link has been sent to ' . $email . '. Check this email inbox for further instructions to change password'
+                );
 
                 $entityManager->persist($secCode);
                 $entityManager->flush();

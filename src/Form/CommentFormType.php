@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Form;
-
 
 use App\Entity\Comment;
 use Symfony\Component\Form\AbstractType;
@@ -21,7 +19,6 @@ class CommentFormType extends AbstractType
                 'attr' => ['autofocus' => null]
             ])
             ->add('submit', SubmitType::class);
-        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)

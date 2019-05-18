@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+
 class UserListController extends AbstractController
 {
 
@@ -16,7 +17,8 @@ class UserListController extends AbstractController
         $users = $this->getDoctrine()->getRepository(User::class)->findAll();
 
         return $this->render('users/users.html.twig', array(
-            'users' => $users));
+            'users' => $users
+        ));
     }
 
     /**
@@ -27,8 +29,7 @@ class UserListController extends AbstractController
         $manager = $this->getDoctrine()->getManager();
         $user = $manager->getRepository(User::class)->find($id);
 
-        if ($user != null)
-        {
+        if ($user != null) {
             $manager->remove($user);
             $manager->flush();
             $this->addFlash('success', 'User "' . $user->getUsername() . '" successfully deleted');
