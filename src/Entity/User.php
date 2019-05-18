@@ -95,7 +95,7 @@ class User implements UserInterface
     private $firstName;
 
     /**
-     * @ORM\Column(type="boolean", options={"default" : false})
+     * @ORM\Column(type="boolean")
      */
     private $isActivated = false;
 

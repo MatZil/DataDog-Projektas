@@ -51,27 +51,8 @@
             <a class="btn btn-primary btn-bg mb-2" href="{{ path('app_addComment', { 'eventID': event.id }) }}">Add
                 comment</a>
         </div>
-        {% for comment in event.comments %}
-            <div class="card mb-2">
-                <h5 class="card-header">
-                    {% if comment.user %}
-                        {{ comment.user.firstname }} ({{ comment.user.username }})
-                    {% else %}
-                        DELETED USER
-                    {% endif %}
-                    <small class="text-muted">
-                        {{ comment.createdAt | date("Y-m-d H:i", "Europe/Vilnius") }}
-                    </small>
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <a class="btn btn-danger btn-sm float-right js-delete-comm"
-                           href="{{ path('app_deleteComment', { 'commentID': comment.id, 'eventID': event.id }) }}">Delete</a>
-                    {% endif %}
-                </h5>
-                <div class="card-body">
-                    <p class="card-text">{{ comment.content }}</p>
-                </div>
-            </div>
-        {% endfor %}
+        {% import "events/macro_comments.html.twig" as comments %}
+        {{ comments.renderComments(event.comments, event.id) }}
     </div>
 {% endblock %}
 

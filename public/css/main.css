@@ -94,3 +94,9 @@ label.required::before {
     margin-left: auto !important;
     margin-right: auto !important;
 }
+
+.card-comment {
+    border-left-width: 2px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
