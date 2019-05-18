@@ -1,10 +1,10 @@
 {% extends 'email_base.html.twig' %}
 {% block body %}
-<h1>{{ event.title }}</h1>
-        <p>Category: {{ event.category }}</p>
-        <p>Date and time: {{ event.date | date("Y-m-d H:i") }}</p>
-        <p>Location: {{ event.location }}</p>
-        <p>Price: {{ event.price == 0 ? 'FREE' : (event.price | number_format(2) ~ ' &euro;') | raw}}</p>
-        <p>Description: {{ event.description }}</p>
-        <a class="btn" href="{{ url('app_eventDetails', {'eventID':event.id}) }}">Link to the event</a>
+    <h1>{{ event.title }}</h1>
+    <p>Category: {{ event.category }}</p>
+    <p>Date and time: {{ event.date | date("Y-m-d H:i") }}</p>
+    <p>Location: {{ event.location }}</p>
+    <p>Price: {{ event.price == 0 ? 'FREE' : (event.price | number_format(2) ~ ' &euro;') | raw }}</p>
+    <p>Description: {{ event.description }}</p>
+    <a class="btn" href="{{ url('app_eventDetails', {'eventID':event.id}) }}">Link to the event</a>
 {% endblock %}

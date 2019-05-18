@@ -54,7 +54,6 @@ class User implements UserInterface
      * )
      * @Assert\NotBlank()
      * @Assert\Length(
-
      *     min = 4,
      *     max = 20,
      *     minMessage = "Your username has to contain at least 4 characters",
@@ -69,8 +68,7 @@ class User implements UserInterface
      *     pattern="/^[a-zA-Z]+$/",
      *     message="Your surname has to contain only alphabetic values"
      * )
-
-     *  @Assert\Length(
+     * @Assert\Length(
      *     max = 40,
      *     maxMessage="Your surname can't contain more than 40 characters"
      * )
@@ -85,7 +83,6 @@ class User implements UserInterface
      * )
      * @Assert\Length(
      *     min=3,
-
      *     max = 20,
      *     minMessage="Your first name has to contain at least 3 characters",
      *     maxMessage="Your first name can't contain more than 20 characters"
@@ -167,7 +164,7 @@ class User implements UserInterface
      */
     public function getPassword(): string
     {
-        return (string) $this->password;
+        return (string)$this->password;
     }
 
     public function setPassword(string $password): self
@@ -293,5 +290,4 @@ class User implements UserInterface
 
         return $this;
     }
-
 }

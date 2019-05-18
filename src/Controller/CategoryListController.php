@@ -13,18 +13,19 @@ class CategoryListController extends AbstractController
 {
 
     /**
-     * @Route("/categories", name="app_categoryList")
+     * @Route("/category", name="app_categoryList")
      */
     public function categories()
     {
         $categories = $this->getDoctrine()->getRepository(Category::class)->findAll();
 
         return $this->render('categories/categories.html.twig', array(
-            'categories' => $categories));
+            'categories' => $categories
+        ));
     }
 
     /**
-     * @Route("/admin/categories/delete/{id}", name="app_categoryDelete")
+     * @Route("/admin/category/{id}/delete", name="app_categoryDelete")
      */
     public function categoryDelete($id)
     {
@@ -46,7 +47,7 @@ class CategoryListController extends AbstractController
     }
 
     /**
-     * @Route("/admin/categories/add", name="app_categoryAdd")
+     * @Route("/admin/category/add", name="app_categoryAdd")
      */
     public function categoryAdd(Request $request)
     {
@@ -69,7 +70,7 @@ class CategoryListController extends AbstractController
     }
 
     /**
-     * @Route("/admin/categories/edit/{id}", name="app_categoryEdit")
+     * @Route("/admin/category/{id}/edit", name="app_categoryEdit")
      */
     public function categoryEdit(Request $request, $id)
     {
@@ -90,8 +91,9 @@ class CategoryListController extends AbstractController
             'addcategoryform' => $form->createView()
         ]);
     }
+
     /**
-     * @Route("/categories/subscribe/{id}", name="app_categorySubscribe")
+     * @Route("/category/{id}/subscribe", name="app_categorySubscribe")
      */
     public function subscribeCategory($id)
     {
@@ -109,8 +111,9 @@ class CategoryListController extends AbstractController
 
         return $this->redirectToRoute("app_categoryList");
     }
+
     /**
-     * @Route("/categories/unsubscribe/{id}", name="app_categoryUnsubscribe")
+     * @Route("/category/{id}/unsubscribe", name="app_categoryUnsubscribe")
      */
     public function unsubscribeCategory($id)
     {

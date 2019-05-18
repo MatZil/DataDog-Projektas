@@ -75,7 +75,7 @@ class RegistrationController extends AbstractController
     }
 
     /**
-     * @Route("/confirmed/{code}", name="app_confirmed")
+     * @Route("/confirm/{code}", name="app_confirm")
      */
     public function confirmed($code = ""): Response
     {
@@ -95,7 +95,10 @@ class RegistrationController extends AbstractController
         }
 
         if ($user != null) {
-            $this->addFlash('success', 'Congratulations, ' . $user->getUsername() . '! Your email has just been verified');
+            $this->addFlash(
+                'success',
+                'Congratulations, ' . $user->getUsername() . '! Your email has just been verified'
+            );
         } else {
             $this->addFlash('danger', 'Sorry, this email confirmation link is expired or does not exist');
         }

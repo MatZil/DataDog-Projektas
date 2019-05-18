@@ -3,5 +3,5 @@
 {% block body %}
     <h1>Hello, {{ username }}!</h1>
     <p>You have successfully registered to our amazing website! All you have to do now is to confirm your email.</p>
-    <a class="btn" href="{{ url('app_confirmed') ~ '/' ~ code }}">Confirm Email Address</a>
+    <a class="btn" href="{{ url('app_confirm', {'code' : code}) }}">Confirm Email Address</a>
 {% endblock %}

@@ -28,13 +28,14 @@ class UserListControllerTest extends WebTestCase
     public function testUsers()
     {
         $client = self::createClient();
-        $client->request('GET', '/admin/users');
+        $path = $client->getContainer()->get('router')->generate('app_userList', [], false);
+        $client->request('GET', $path);
         // Returns code 302, because user is not logged in or is not an admin
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
 
         // Login admin with username: admin (has to be registered to the website with admin privileges)
         $client = $this->createAuthorizedClient();
-        $crawler = $client->request('GET', '/admin/users');
+        $crawler = $client->request('GET', $path);
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
 
         $this->assertGreaterThan(
@@ -46,7 +47,8 @@ class UserListControllerTest extends WebTestCase
     public function testUserDelete()
     {
         $client = $this->createAuthorizedClient();
-        $crawler = $client->request('GET', '/admin/users');
+        $path = $client->getContainer()->get('router')->generate('app_userList', [], false);
+        $crawler = $client->request('GET', $path);
         $client->click($crawler->selectLink('Delete')->eq(1)->link()); // Select second link
 
         $crawler = $client->followRedirect();

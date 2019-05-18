@@ -29,7 +29,8 @@ class CategoryListControllerTest extends WebTestCase
     public function testCategories()
     {
         $client = self::createClient();
-        $crawler = $client->request('GET', '/categories');
+        $path = $client->getContainer()->get('router')->generate('app_categoryList', [], false);
+        $crawler = $client->request('GET', $path);
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
 
         $this->assertGreaterThan(
@@ -41,7 +42,8 @@ class CategoryListControllerTest extends WebTestCase
     public function testCategoryAdd()
     {
         $client = $this->createAuthorizedClient();
-        $crawler = $client->request('GET', '/categories');
+        $path = $client->getContainer()->get('router')->generate('app_categoryList', [], false);
+        $crawler = $client->request('GET', $path);
         $crawler = $client->click($crawler->selectLink('Add category')->link());
 
         // Fill in the form and submit it
@@ -65,7 +67,8 @@ class CategoryListControllerTest extends WebTestCase
     public function testCategoryEdit()
     {
         $client = $this->createAuthorizedClient();
-        $crawler = $client->request('GET', '/categories');
+        $path = $client->getContainer()->get('router')->generate('app_categoryList', [], false);
+        $crawler = $client->request('GET', $path);
         $crawler = $client->click($crawler->selectLink('Edit')->link());
 
         $form = $crawler->selectButton('Submit')->form([
@@ -85,7 +88,8 @@ class CategoryListControllerTest extends WebTestCase
     public function testCategorySubscribe()
     {
         $client = $this->createAuthorizedClient();
-        $crawler = $client->request('GET', '/categories');
+        $path = $client->getContainer()->get('router')->generate('app_categoryList', [], false);
+        $crawler = $client->request('GET', $path);
         $client->click($crawler->selectLink('Subscribe')->link());
 
         $client->followRedirect();
@@ -98,7 +102,8 @@ class CategoryListControllerTest extends WebTestCase
     public function testCategoryUnsubscribe()
     {
         $client = $this->createAuthorizedClient();
-        $crawler = $client->request('GET', '/categories');
+        $path = $client->getContainer()->get('router')->generate('app_categoryList', [], false);
+        $crawler = $client->request('GET', $path);
         $client->click($crawler->selectLink('Unsubscribe')->link());
 
         $client->followRedirect();
@@ -111,7 +116,8 @@ class CategoryListControllerTest extends WebTestCase
     public function testCategoryDelete()
     {
         $client = $this->createAuthorizedClient();
-        $crawler = $client->request('GET', '/categories');
+        $path = $client->getContainer()->get('router')->generate('app_categoryList', [], false);
+        $crawler = $client->request('GET', $path);
         $client->click($crawler->selectLink('Delete')->link());
 
         $crawler = $client->followRedirect();
