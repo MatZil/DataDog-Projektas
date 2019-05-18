@@ -9,8 +9,8 @@ class WelcomeControllerTest extends WebTestCase
     public function testIndex()
     {
         $client = static::createClient();
-
-        $crawler = $client->request('GET', '/');
+        $path = $client->getContainer()->get('router')->generate('index', [], false);
+        $crawler = $client->request('GET', $path);
 
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
 

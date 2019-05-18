@@ -12,14 +12,14 @@
                 <span class="float-right">
                     {% if app.user == comment.user or is_granted('ROLE_ADMIN') %}
                         <a class="text-primary ml-2"
-                           href="{{ path('app_editComment', { 'commentID': comment.id, 'eventID': eventID }) }}">Edit</a>
+                           href="{{ path('app_commentEdit', { 'commentID': comment.id, 'eventID': eventID }) }}">Edit</a>
                     {% endif %}
                     {% if is_granted('ROLE_ADMIN') %}
                         <a class="text-danger ml-2 js-delete-comm"
-                           href="{{ path('app_deleteComment', { 'commentID': comment.id, 'eventID': eventID }) }}">Delete</a>
+                           href="{{ path('app_commentDelete', { 'commentID': comment.id, 'eventID': eventID }) }}">Delete</a>
                     {% endif %}
                     <a class="text-secondary ml-2"
-                       href="{{ path('app_replyComment', { 'eventID': eventID, 'commentID': comment.id }) }}">Reply</a>
+                       href="{{ path('app_commentReply', { 'eventID': eventID, 'commentID': comment.id }) }}">Reply</a>
                 </span>
             </div>
             <div class="card-body">

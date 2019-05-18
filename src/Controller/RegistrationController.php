@@ -75,7 +75,7 @@ class RegistrationController extends AbstractController
     }
 
     /**
-     * @Route("/confirmed/{code}", name="app_confirmed")
+     * @Route("/confirm/{code}", name="app_confirm")
      */
     public function confirmed($code = ""): Response
     {

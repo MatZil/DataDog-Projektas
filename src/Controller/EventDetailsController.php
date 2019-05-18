@@ -30,7 +30,7 @@ class EventDetailsController extends AbstractController
     }
 
     /**
-     * @Route("/event/{eventID}/comment/add", name="app_addComment")
+     * @Route("/event/{eventID}/comment/add", name="app_commentAdd")
      */
     public function addComment(Request $request, $eventID){
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
@@ -65,7 +65,7 @@ class EventDetailsController extends AbstractController
 
 
     /**
-     * @Route("/event/{eventID}/comment/{commentID}/reply", name="app_replyComment")
+     * @Route("/event/{eventID}/comment/{commentID}/reply", name="app_commentReply")
      */
     public function replyComment(Request $request, $eventID, $commentID)
     {
@@ -101,7 +101,7 @@ class EventDetailsController extends AbstractController
     }
 
     /**
-     * @Route("/event/{eventID}/comment/{commentID}/edit", name="app_editComment")
+     * @Route("/event/{eventID}/comment/{commentID}/edit", name="app_commentEdit")
      */
     public function editComment(Request $request, $eventID, $commentID)
     {
@@ -136,7 +136,7 @@ class EventDetailsController extends AbstractController
     }
 
     /**
-     * @Route("/admin/event/{eventID}/comment/{commentID}/delete", name="app_deleteComment")
+     * @Route("/admin/event/{eventID}/comment/{commentID}/delete", name="app_commentDelete")
      */
     public function commentDelete($commentID, $eventID){
         $manager = $this->getDoctrine()->getManager();
@@ -151,7 +151,7 @@ class EventDetailsController extends AbstractController
     }
 
     /**
-     * @Route("/admin/event/{eventID}/delete", name="app_deleteEvent")
+     * @Route("/admin/event/{eventID}/delete", name="app_eventDelete")
      */
     public function eventDelete($eventID){
         $manager = $this->getDoctrine()->getManager();

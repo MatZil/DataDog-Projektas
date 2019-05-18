@@ -10,7 +10,8 @@ class RegistrationControllerTest extends WebTestCase
     public function testRegister()
     {
         $client = $this->createClient();
-        $crawler = $client->request('GET', '/register');
+        $path = $client->getContainer()->get('router')->generate('app_register', [], false);
+        $crawler = $client->request('GET', $path);
         //$crawler = $client->click($crawler->selectLink('Add category')->link());
 
         // Fill in the form and submit it

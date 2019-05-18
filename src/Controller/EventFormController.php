@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 class EventFormController extends AbstractController
 {
     /**
-     * @Route("/admin/{action}/event/{eventID}", name="app_eventForm")
+     * @Route("/admin/event/{action}/{eventID}", name="app_eventForm")
      */
     public function createEvent(Request $request, $action, $eventID = null, \Swift_Mailer $mailer)
     {
