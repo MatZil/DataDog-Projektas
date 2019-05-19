@@ -7,6 +7,7 @@
  */
 
 namespace App\Tests\Controller;
+
 use App\Entity\User;
 use App\Entity\Event;
 use App\Entity\Category;
@@ -132,6 +133,4 @@ class EventDetailsControllerTest extends WebTestCase
         self::$kernel->getContainer()->get('doctrine')->getManager()->remove($category);
         self::$kernel->getContainer()->get('doctrine')->getManager()->flush();
     }
-
-
 }
