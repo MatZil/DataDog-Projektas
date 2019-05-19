@@ -27,7 +27,7 @@ class EventDetailsControllerTest extends WebTestCase
 
     static function setUpBeforeClass()
     {
-        $client = static::createClient();
+        self::bootKernel();
         $container = self::$kernel->getContainer();
         $em = $container->get('doctrine')->getManager();
 
