@@ -24,30 +24,7 @@ class EventDetailsControllerTest extends WebTestCase
         $client->getCookieJar()->set(new Cookie($session->getName(), $session->getId()));
         return $client;
     }
-
-    static function setUpBeforeClass()
-    {
-        self::bootKernel();
-        $container = self::$kernel->getContainer();
-        $em = $container->get('doctrine')->getManager();
-
-        $category = new Category();
-        $category->setName("Artistic");
-        $em->persist($category);
-
-        $event= new Event();
-        $event->setTitle('Naujas renginys');
-        $event->setIntro('Naujo renginio izanga');
-        $event->setDescription('Kiek ilgokas naujo renginio aprasymas, i kuri ieina ganetinai nemazai smulkmenu.');
-        $event->setDate(date_create('2020-05-01 12:00'));
-        $event->setLocation('Santakos slenis');
-        $event->setCategory($category);
-        $event->setPrice(12);
-        $event->setPhoto(null);
-
-        $em->persist($event);
-        $em->flush();
-    }
+    
     public function testEvent()
     {
         $client = $this->createAuthorizedClient();
