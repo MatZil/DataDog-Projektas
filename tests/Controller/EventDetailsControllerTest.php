@@ -103,15 +103,14 @@ class EventDetailsControllerTest extends WebTestCase
         $comment = self::$kernel->getContainer()->get('doctrine')->getRepository(Comment::class)->findOneByContent('TestContent');
         $this->assertEquals('TestContent', $comment->getContent());
     }
-/**
+
     public function testCommentEdit()
     {
         $client = $this->createAuthorizedClient();
         $event = self::$kernel->getContainer()->get('doctrine')->getRepository(Event::class)->findOneByTitle('Naujas renginys')->getID();
         $path = $client->getContainer()->get('router')->generate('app_eventDetails', ['eventID'=>$event], false);
         $crawler = $client->request('GET', $path);
-        $crawler = $client->click($crawler->selectLink('Edit')->link());
-
+        $crawler = $client->click($crawler->selectLink('Edit')->links()[1]);
         $form = $crawler->selectButton('Submit')->form([
             'comment_form[content]' => 'TestCommentEdited'
         ]);
@@ -124,14 +123,14 @@ class EventDetailsControllerTest extends WebTestCase
         // Check data in the show view
         $this->assertGreaterThan(0, $crawler->filter('html:contains("TestCommentEdited")')->count());
     }
-    /**
+
     public function testCommentDelete()
     {
         $client = $this->createAuthorizedClient();
         $event = self::$kernel->getContainer()->get('doctrine')->getRepository(Event::class)->findOneByTitle('Naujas renginys')->getID();
         $path = $client->getContainer()->get('router')->generate('app_eventDetails', ['eventID'=>$event], false);
         $crawler = $client->request('GET', $path);
-        $client->click($crawler->selectLink('Delete')->link());
+        $client->click($crawler->selectLink('Delete')->links()[1]);
 
         $crawler = $client->followRedirect();
 
@@ -142,7 +141,7 @@ class EventDetailsControllerTest extends WebTestCase
         // Check if the entity has been deleted from the list
         $this->assertEquals(0, $crawler->filter('html:contains("TestContent")')->count());
     }
-     **/
+
 
     public function testEventDelete()
     {
