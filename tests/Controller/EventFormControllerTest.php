@@ -63,9 +63,5 @@ class EventFormControllerTest extends WebTestCase
         //Check data in the database
         $event = self::$kernel->getContainer()->get('doctrine')->getRepository(Event::class)->findOneByTitle('Naujas renginys');
         $this->assertEquals('Naujas renginys', $event->getTitle());
-
-        $em->remove($em->merge($event));
-        $em->remove($em->merge($category));
-        $em->flush();
     }
 }

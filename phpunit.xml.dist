@@ -8,14 +8,19 @@
          bootstrap="config/bootstrap.php"
 >
     <php>
-        <ini name="error_reporting" value="-1" />
-        <env name="APP_ENV" value="test" />
-        <env name="SHELL_VERBOSITY" value="-1" />
+        <ini name="error_reporting" value="-1"/>
+        <env name="APP_ENV" value="test"/>
+        <env name="SHELL_VERBOSITY" value="-1"/>
     </php>
 
     <testsuites>
         <testsuite name="Project Test Suite">
-            <directory>tests</directory>
+            <file>tests/Controller/WelcomeControllerTest.php</file>
+            <file>tests/Controller/CategoryListControllerTest.php</file>
+            <file>tests/Controller/RegistrationControllerTest.php</file>
+            <file>tests/Controller/EventFormControllerTest.php</file>
+            <file>tests/Controller/EventDetailsControllerTest.php</file>
+            <file>tests/Controller/UserListControllerTest.php</file>
         </testsuite>
     </testsuites>
 
@@ -26,6 +31,6 @@
     </filter>
 
     <listeners>
-        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
+        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener"/>
     </listeners>
 </phpunit>
