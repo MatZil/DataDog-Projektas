@@ -11,6 +11,12 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class EventDetailsControllerTest extends WebTestCase
 {
+    private $client;
+    
+    protected function setUp()
+    {
+        $this->client = $this->createAuthorizedClient();
+    }
 
     protected function createAuthorizedClient()
     {
@@ -24,14 +30,13 @@ class EventDetailsControllerTest extends WebTestCase
         $client->getCookieJar()->set(new Cookie($session->getName(), $session->getId()));
         return $client;
     }
-    
+
     public function testEvent()
     {
-        $client = $this->createAuthorizedClient();
         $event = self::$kernel->getContainer()->get('doctrine')->getRepository(Event::class)->findOneByTitle('Naujas renginys')->getID();
-        $path = $client->getContainer()->get('router')->generate('app_eventDetails', ['eventID'=>$event], false);
-        $crawler = $client->request('GET', $path);
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $path = $this->client->getContainer()->get('router')->generate('app_eventDetails', ['eventID'=>$event], false);
+        $crawler = $this->client->request('GET', $path);
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
 
         $this->assertGreaterThan(
             0,
@@ -41,20 +46,19 @@ class EventDetailsControllerTest extends WebTestCase
 
     public function testCommentAdd()
     {
-        $client = $this->createAuthorizedClient();
         $event = self::$kernel->getContainer()->get('doctrine')->getRepository(Event::class)->findOneByTitle('Naujas renginys')->getID();
-        $path = $client->getContainer()->get('router')->generate('app_eventDetails', ['eventID'=>$event], false);
-        $crawler = $client->request('GET', $path);
+        $path = $this->client->getContainer()->get('router')->generate('app_eventDetails', ['eventID'=>$event], false);
+        $crawler = $this->client->request('GET', $path);
 
-        $crawler = $client->click($crawler->selectLink('Add comment')->link());
+        $crawler = $this->client->click($crawler->selectLink('Add comment')->link());
        // Fill in the form and submit it
         $form = $crawler->selectButton('Submit')->form([
             'comment_form[content]' => 'TestContent'
         ]);
-        $client->submit($form);
+        $this->client->submit($form);
         // Check if user is redirected
-        $this->assertTrue($client->getResponse()->isRedirect());
-        $crawler = $client->followRedirect();
+        $this->assertTrue($this->client->getResponse()->isRedirect());
+        $crawler = $this->client->followRedirect();
 
         // Check data in the show view
         $this->assertGreaterThan(0, $crawler->filter('html:contains("TestContent")')->count());
@@ -66,20 +70,19 @@ class EventDetailsControllerTest extends WebTestCase
 
     public function testCommentEdit()
     {
-        $client = $this->createAuthorizedClient();
         $event = self::$kernel->getContainer()->get('doctrine')->getRepository(Event::class)->findOneByTitle('Naujas renginys')->getID();
-        $path = $client->getContainer()->get('router')->generate('app_eventDetails', ['eventID'=>$event], false);
+        $path = $this->client->getContainer()->get('router')->generate('app_eventDetails', ['eventID'=>$event], false);
 
-        $crawler = $client->request('GET', $path);
-        $crawler = $client->click($crawler->selectLink('Edit')->links()[1]);
+        $crawler = $this->client->request('GET', $path);
+        $crawler = $this->client->click($crawler->selectLink('Edit')->links()[1]);
         $form = $crawler->selectButton('Submit')->form([
             'comment_form[content]' => 'TestCommentEdited'
         ]);
 
-        $client->submit($form);
+        $this->client->submit($form);
         // Check if user is redirected
-        $this->assertTrue($client->getResponse()->isRedirect());
-        $crawler = $client->followRedirect();
+        $this->assertTrue($this->client->getResponse()->isRedirect());
+        $crawler = $this->client->followRedirect();
 
         // Check data in the show view
         $this->assertGreaterThan(0, $crawler->filter('html:contains("TestCommentEdited")')->count());
@@ -87,14 +90,13 @@ class EventDetailsControllerTest extends WebTestCase
 
     public function testCommentDelete()
     {
-        $client = $this->createAuthorizedClient();
         $event = self::$kernel->getContainer()->get('doctrine')->getRepository(Event::class)->findOneByTitle('Naujas renginys')->getID();
-        $path = $client->getContainer()->get('router')->generate('app_eventDetails', ['eventID'=>$event], false);
+        $path = $this->client->getContainer()->get('router')->generate('app_eventDetails', ['eventID'=>$event], false);
 
-        $crawler = $client->request('GET', $path);
-        $client->click($crawler->selectLink('Delete')->links()[1]);
+        $crawler = $this->client->request('GET', $path);
+        $this->client->click($crawler->selectLink('Delete')->links()[1]);
 
-        $crawler = $client->followRedirect();
+        $crawler = $this->client->followRedirect();
 
         //Check data in the database
         $category = self::$kernel->getContainer()->get('doctrine')->getRepository(Comment::class)->findOneByContent('TestContent');
@@ -106,19 +108,16 @@ class EventDetailsControllerTest extends WebTestCase
 
     public function testEventDelete()
     {
-        $client = $this->createAuthorizedClient();
         $event = self::$kernel->getContainer()->get('doctrine')->getRepository(Event::class)->findOneByTitle('Naujas renginys')->getID();
-        $path = $client->getContainer()->get('router')->generate('app_eventDetails', ['eventID'=>$event], false);
+        $path = $this->client->getContainer()->get('router')->generate('app_eventDetails', ['eventID'=>$event], false);
 
-        $crawler = $client->request('GET', $path);
-        $client->click($crawler->selectLink('Delete Event')->link());
-        $crawler = $client->followRedirect();
+        $crawler = $this->client->request('GET', $path);
+        $this->client->click($crawler->selectLink('Delete Event')->link());
 
         $event = self::$kernel->getContainer()->get('doctrine')->getRepository(Event::class)->findOneByTitle('Naujas renginys');
         $this->assertEmpty($event);
-        $this->assertEquals(0, $crawler->filter('html:contains("Nauja renginys")')->count());
 
-        $category = self::$kernel->getContainer()->get('doctrine')->getRepository(Category::class)->findOneByName('Artistic');
+        $category = self::$kernel->getContainer()->get('doctrine')->getRepository(Category::class)->findOneByName('Sport');
         self::$kernel->getContainer()->get('doctrine')->getManager()->remove($category);
         self::$kernel->getContainer()->get('doctrine')->getManager()->flush();
     }
