@@ -10,6 +10,13 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class CategoryListControllerTest extends WebTestCase
 {
+    private $client;
+
+    protected function setUp()
+    {
+        $this->client = $this->createAuthorizedClient();
+    }
+
     protected function createAuthorizedClient()
     {
         $client = static::createClient();
@@ -28,10 +35,10 @@ class CategoryListControllerTest extends WebTestCase
 
     public function testCategories()
     {
-        $client = self::createClient();
-        $path = $client->getContainer()->get('router')->generate('app_categoryList', [], false);
-        $crawler = $client->request('GET', $path);
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->client = self::createClient();
+        $path = $this->client->getContainer()->get('router')->generate('app_categoryList', [], false);
+        $crawler = $this->client->request('GET', $path);
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
 
         $this->assertGreaterThan(
             0,
@@ -41,20 +48,19 @@ class CategoryListControllerTest extends WebTestCase
 
     public function testCategoryAdd()
     {
-        $client = $this->createAuthorizedClient();
-        $path = $client->getContainer()->get('router')->generate('app_categoryList', [], false);
-        $crawler = $client->request('GET', $path);
-        $crawler = $client->click($crawler->selectLink('Add category')->link());
+        $path = $this->client->getContainer()->get('router')->generate('app_categoryList', [], false);
+        $crawler = $this->client->request('GET', $path);
+        $crawler = $this->client->click($crawler->selectLink('Add category')->link());
 
         // Fill in the form and submit it
         $form = $crawler->selectButton('Submit')->form([
             'category_form[name]' => 'TestCategory',
         ]);
-        $client->submit($form);
+        $this->client->submit($form);
 
         // Check if user is redirected
-        $this->assertTrue($client->getResponse()->isRedirect());
-        $crawler = $client->followRedirect();
+        $this->assertTrue($this->client->getResponse()->isRedirect());
+        $crawler = $this->client->followRedirect();
 
         // Check data in the show view
         $this->assertGreaterThan(0, $crawler->filter('html:contains("TestCategory")')->count());
@@ -66,20 +72,19 @@ class CategoryListControllerTest extends WebTestCase
 
     public function testCategoryEdit()
     {
-        $client = $this->createAuthorizedClient();
-        $path = $client->getContainer()->get('router')->generate('app_categoryList', [], false);
-        $crawler = $client->request('GET', $path);
-        $crawler = $client->click($crawler->selectLink('Edit')->link());
+        $path = $this->client->getContainer()->get('router')->generate('app_categoryList', [], false);
+        $crawler = $this->client->request('GET', $path);
+        $crawler = $this->client->click($crawler->selectLink('Edit')->link());
 
         $form = $crawler->selectButton('Submit')->form([
             'category_form[name]' => 'TestCategoryEdited',
         ]);
 
-        $client->submit($form);
+        $this->client->submit($form);
 
         // Check if user is redirected
-        $this->assertTrue($client->getResponse()->isRedirect());
-        $crawler = $client->followRedirect();
+        $this->assertTrue($this->client->getResponse()->isRedirect());
+        $crawler = $this->client->followRedirect();
 
         // Check data in the show view
         $this->assertGreaterThan(0, $crawler->filter('html:contains("TestCategoryEdited")')->count());
@@ -87,40 +92,37 @@ class CategoryListControllerTest extends WebTestCase
 
     public function testCategorySubscribe()
     {
-        $client = $this->createAuthorizedClient();
-        $path = $client->getContainer()->get('router')->generate('app_categoryList', [], false);
-        $crawler = $client->request('GET', $path);
-        $client->click($crawler->selectLink('Subscribe')->link());
+        $path = $this->client->getContainer()->get('router')->generate('app_categoryList', [], false);
+        $crawler = $this->client->request('GET', $path);
+        $this->client->click($crawler->selectLink('Subscribe')->link());
 
-        $client->followRedirect();
+        $this->client->followRedirect();
 
         // Check if the button has changed to Unsubscribe
-        $this->assertNotRegExp('/Subscribe/', $client->getResponse()->getContent());
-        $this->assertRegExp('/Unsubscribe/', $client->getResponse()->getContent());
+        $this->assertNotRegExp('/Subscribe/', $this->client->getResponse()->getContent());
+        $this->assertRegExp('/Unsubscribe/', $this->client->getResponse()->getContent());
     }
 
     public function testCategoryUnsubscribe()
     {
-        $client = $this->createAuthorizedClient();
-        $path = $client->getContainer()->get('router')->generate('app_categoryList', [], false);
-        $crawler = $client->request('GET', $path);
-        $client->click($crawler->selectLink('Unsubscribe')->link());
+        $path = $this->client->getContainer()->get('router')->generate('app_categoryList', [], false);
+        $crawler = $this->client->request('GET', $path);
+        $this->client->click($crawler->selectLink('Unsubscribe')->link());
 
-        $client->followRedirect();
+        $this->client->followRedirect();
 
         // Check if the button has changed to Subscribe
-        $this->assertNotRegExp('/Unsubscribe/', $client->getResponse()->getContent());
-        $this->assertRegExp('/Subscribe/', $client->getResponse()->getContent());
+        $this->assertNotRegExp('/Unsubscribe/', $this->client->getResponse()->getContent());
+        $this->assertRegExp('/Subscribe/', $this->client->getResponse()->getContent());
     }
 
     public function testCategoryDelete()
     {
-        $client = $this->createAuthorizedClient();
-        $path = $client->getContainer()->get('router')->generate('app_categoryList', [], false);
-        $crawler = $client->request('GET', $path);
-        $client->click($crawler->selectLink('Delete')->link());
+        $path = $this->client->getContainer()->get('router')->generate('app_categoryList', [], false);
+        $crawler = $this->client->request('GET', $path);
+        $this->client->click($crawler->selectLink('Delete')->link());
 
-        $crawler = $client->followRedirect();
+        $crawler = $this->client->followRedirect();
 
         //Check data in the database
         $category = self::$kernel->getContainer()->get('doctrine')->getRepository(Category::class)->findOneByName('TestCategoryEdited');
