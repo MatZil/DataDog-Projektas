@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Kon
- * Date: 5/19/2019
- * Time: 2:36 PM
- */
 
 namespace App\Tests\Controller;
 use App\Entity\User;
@@ -24,47 +18,36 @@ class EventDetailsControllerTest extends WebTestCase
         $container = static::$kernel->getContainer();
         $session = $container->get('session');
         $person = self::$kernel->getContainer()->get('doctrine')->getRepository(User::class)->findOneByUsername('admin');
-
         $token = new UsernamePasswordToken($person, null, 'main', $person->getRoles());
         $session->set('_security_main', serialize($token));
         $session->save();
-
         $client->getCookieJar()->set(new Cookie($session->getName(), $session->getId()));
-
         return $client;
     }
 
-    public function testCreateTestEvent()
+    static function setUpBeforeClass()
     {
-        $client = $this->createAuthorizedClient();
+        $client = static::createClient();
         $container = self::$kernel->getContainer();
+        $em = $container->get('doctrine')->getManager();
+
         $category = new Category();
         $category->setName("Artistic");
-        $em = $container->get('doctrine')->getManager();
         $em->persist($category);
+
+        $event= new Event();
+        $event->setTitle('Naujas renginys');
+        $event->setIntro('Naujo renginio izanga');
+        $event->setDescription('Kiek ilgokas naujo renginio aprasymas, i kuri ieina ganetinai nemazai smulkmenu.');
+        $event->setDate(date_create('2020-05-01 12:00'));
+        $event->setLocation('Santakos slenis');
+        $event->setCategory($category);
+        $event->setPrice(12);
+        $event->setPhoto(null);
+
+        $em->persist($event);
         $em->flush();
-        $path = $client->getContainer()->get('router')->generate('app_eventForm', ['action' => 'create'], false);
-        $crawler = $client->request('GET', $path);
-        // Fill in the form and submit it
-        $form = $crawler->selectButton('Create Event')->form([
-            'event_form[title]' => 'Naujas renginys',
-            'event_form[intro]' => 'Naujo renginio izanga',
-            'event_form[description]' => 'Kiek ilgokas naujo renginio aprasymas, i kuri ieina ganetinai nemazai smulkmenu.',
-            'event_form[date][date][year]' => 2020,
-            'event_form[date][date][month]' => 05,
-            'event_form[date][date][day]' => 01,
-            'event_form[date][time][hour]' => 12,
-            'event_form[date][time][minute]' => 00,
-            'event_form[location]' => 'Santakos slenis',
-            'event_form[category]' => $category->getId(),
-            'event_form[price]' => 12
-        ]);
-        $client->submit($form);
-        $event = self::$kernel->getContainer()->get('doctrine')->getRepository(Event::class)->findOneByTitle('Naujas renginys');
-        $this->assertEquals('Naujas renginys', $event->getTitle());
-
     }
-
     public function testEvent()
     {
         $client = $this->createAuthorizedClient();
@@ -109,6 +92,7 @@ class EventDetailsControllerTest extends WebTestCase
         $client = $this->createAuthorizedClient();
         $event = self::$kernel->getContainer()->get('doctrine')->getRepository(Event::class)->findOneByTitle('Naujas renginys')->getID();
         $path = $client->getContainer()->get('router')->generate('app_eventDetails', ['eventID'=>$event], false);
+
         $crawler = $client->request('GET', $path);
         $crawler = $client->click($crawler->selectLink('Edit')->links()[1]);
         $form = $crawler->selectButton('Submit')->form([
@@ -129,6 +113,7 @@ class EventDetailsControllerTest extends WebTestCase
         $client = $this->createAuthorizedClient();
         $event = self::$kernel->getContainer()->get('doctrine')->getRepository(Event::class)->findOneByTitle('Naujas renginys')->getID();
         $path = $client->getContainer()->get('router')->generate('app_eventDetails', ['eventID'=>$event], false);
+
         $crawler = $client->request('GET', $path);
         $client->click($crawler->selectLink('Delete')->links()[1]);
 
@@ -142,22 +127,22 @@ class EventDetailsControllerTest extends WebTestCase
         $this->assertEquals(0, $crawler->filter('html:contains("TestContent")')->count());
     }
 
-
     public function testEventDelete()
     {
         $client = $this->createAuthorizedClient();
         $event = self::$kernel->getContainer()->get('doctrine')->getRepository(Event::class)->findOneByTitle('Naujas renginys')->getID();
         $path = $client->getContainer()->get('router')->generate('app_eventDetails', ['eventID'=>$event], false);
+
         $crawler = $client->request('GET', $path);
         $client->click($crawler->selectLink('Delete Event')->link());
         $crawler = $client->followRedirect();
+
         $event = self::$kernel->getContainer()->get('doctrine')->getRepository(Event::class)->findOneByTitle('Naujas renginys');
         $this->assertEmpty($event);
         $this->assertEquals(0, $crawler->filter('html:contains("Nauja renginys")')->count());
+
         $category = self::$kernel->getContainer()->get('doctrine')->getRepository(Category::class)->findOneByName('Artistic');
         self::$kernel->getContainer()->get('doctrine')->getManager()->remove($category);
         self::$kernel->getContainer()->get('doctrine')->getManager()->flush();
     }
-
-
 }
