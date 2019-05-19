@@ -18,6 +18,7 @@
             <file>tests/Controller/WelcomeControllerTest.php</file>
             <file>tests/Controller/CategoryListControllerTest.php</file>
             <file>tests/Controller/RegistrationControllerTest.php</file>
+            <file>tests/Controller/SecurityControllerTest.php</file>
             <file>tests/Controller/EventFormControllerTest.php</file>
             <file>tests/Controller/EventDetailsControllerTest.php</file>
             <file>tests/Controller/UserListControllerTest.php</file>
