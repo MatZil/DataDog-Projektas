@@ -9,7 +9,7 @@
                     <h5 class="m-0 mr-1">DELETED USER</h5>
                 {% endif %}
                 <span class="text-muted mr-auto">{{ comment.createdAt | ago }}</span>
-                <span class="float-right">
+                <span>
                     {% if app.user == comment.user or is_granted('ROLE_ADMIN') %}
                         <a class="text-primary ml-2"
                            href="{{ path('app_commentEdit', { 'commentID': comment.id, 'eventID': eventID }) }}">Edit</a>
