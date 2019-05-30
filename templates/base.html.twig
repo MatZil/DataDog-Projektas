@@ -14,63 +14,69 @@
 </head>
 <body>
 {% block navbar %}
-    <header class="navbar navbar-expand navbar-light bg-white sticky-top">
+    <header class="navbar navbar-expand-sm navbar-light bg-white sticky-top">
         <a class="navbar-brand" href="{{ path('index') }}">KTU Events</a>
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="{{ path('index') }}">Home</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ path('app_categoryList') }}">Categories</a>
-            </li>
-        </ul>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-        <ul class="navbar-nav">
-            {% if not app.user %}
-                <li class="nav-item mr-2">
-                    <a class="btn btn-outline-primary" href="{{ path('app_login') }}">Login</a>
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('index') }}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="btn btn-outline-primary" href="{{ path('app_register') }}">Register</a>
+                    <a class="nav-link" href="{{ path('app_categoryList') }}">Categories</a>
                 </li>
-            {% else %}
-                <li class="nav-item dropdown">
-                    <a class="btn btn-outline-primary d-flex" href="#" data-toggle="dropdown">
-                        <i class="material-icons-outlined mr-1">account_circle</i>
-                        <span>{{ app.user.firstName }}</span>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right mt-3 mr--1">
-                        {% if is_granted('ROLE_ADMIN') %}
-                            <a class="dropdown-item d-flex" href="{{ path('app_eventForm', { 'action': 'create' }) }}">
-                                <span class="mr-auto">New event</span>
-                                <i class="material-icons-outlined ml-2">add</i>
-                            </a>
-                            <a class="dropdown-item d-flex" href="{{ path('app_userList') }}">
-                                <span class="mr-auto">Users list</span>
-                                <i class="material-icons-outlined ml-2">people</i>
-                            </a>
-                        {% endif %}
-                        <a class="dropdown-item d-flex" href="{{ path('app_categoryList') }}">
-                            <span class="mr-auto">Event categories</span>
-                            <i class="material-icons-outlined ml-2">category</i>
-                        </a>
-                        {% if is_granted('ROLE_ADMIN') %}
-                            <div class="dropdown-divider"></div>
-                        {% endif %}
-                        <a class="dropdown-item d-flex" href="{{ path('app_changePassword') }}">
-                            <span class="mr-auto">Change password</span>
-                            <i class="material-icons-outlined ml-2">settings</i>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item d-flex" href="{{ path('app_logout') }}">
-                            <span class="mr-auto">Logout</span>
-                            <i class="material-icons-outlined ml-2">exit_to_app</i>
-                        </a>
+            </ul>
 
-                    </div>
-                </li>
-            {% endif %}
-        </ul>
+            <ul class="navbar-nav">
+                {% if not app.user %}
+                    <li class="nav-item my-1 my-sm-0 mr-sm-2">
+                        <a class="btn btn-outline-primary d-flex" href="{{ path('app_login') }}">Login</a>
+                    </li>
+                    <li class="nav-item my-1 my-sm-0">
+                        <a class="btn btn-outline-primary d-flex" href="{{ path('app_register') }}">Register</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item dropdown my-1 my-sm-0">
+                        <a class="btn btn-outline-primary d-flex" href="#" data-toggle="dropdown">
+                            <i class="material-icons-outlined mr-1">account_circle</i>
+                            <span>{{ app.user.firstName }}</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right mt-2 mt-sm-3 mr-sm--1 ">
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <a class="dropdown-item d-flex" href="{{ path('app_eventForm', { 'action': 'create' }) }}">
+                                    <span class="mr-auto">New event</span>
+                                    <i class="material-icons-outlined ml-2">add</i>
+                                </a>
+                                <a class="dropdown-item d-flex" href="{{ path('app_userList') }}">
+                                    <span class="mr-auto">Users list</span>
+                                    <i class="material-icons-outlined ml-2">people</i>
+                                </a>
+                            {% endif %}
+                            <a class="dropdown-item d-flex" href="{{ path('app_categoryList') }}">
+                                <span class="mr-auto">Event categories</span>
+                                <i class="material-icons-outlined ml-2">category</i>
+                            </a>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <div class="dropdown-divider"></div>
+                            {% endif %}
+                            <a class="dropdown-item d-flex" href="{{ path('app_changePassword') }}">
+                                <span class="mr-auto">Change password</span>
+                                <i class="material-icons-outlined ml-2">settings</i>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item d-flex" href="{{ path('app_logout') }}">
+                                <span class="mr-auto">Logout</span>
+                                <i class="material-icons-outlined ml-2">exit_to_app</i>
+                            </a>
+
+                        </div>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
     </header>
 {% endblock %}
 

@@ -17,6 +17,12 @@ label.required::before {
     margin-right: -.25rem !important;
 }
 
+@media (min-width: 576px) {
+    .mr-sm--1 {
+        margin-right: -.25rem !important;
+    }
+}
+
 .border-width-3 {
     border-width:3px !important;
 }
